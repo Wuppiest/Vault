@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Vault">
   
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0C'/%3E%3Ccircle cx='90' cy='90' r='40' fill='none' stroke='%23D4AF37' stroke-width='8'/%3E%3Cpath d='M90 30 L90 50 M90 130 L90 150 M30 90 L50 90 M130 90 L150 90' stroke='%23D4AF37' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='10' fill='%23D4AF37'/%3E%3C/svg%3E">
+  <link class="apple-touch-icon" rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0C'/%3E%3Ccircle cx='90' cy='90' r='40' fill='none' stroke='%23D4AF37' stroke-width='8'/%3E%3Cpath d='M90 30 L90 50 M90 130 L90 150 M30 90 L50 90 M130 90 L150 90' stroke='%23D4AF37' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='10' fill='%23D4AF37'/%3E%3C/svg%3E">
 
   <title>Vault - Personal 3D Edition</title>
   <style>
@@ -270,10 +270,11 @@
     .transaction-row-wrapper {
       position: relative;
       width: 100%;
-      background: var(--accent-red);
+      /* FIX: Auf transparent gesetzt, um Kanten-Bleeding im Stillstand zu verhindern */
+      background: transparent; 
       border-radius: 20px;
       overflow: hidden;
-      transition: height 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), margin 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.3s;
+      transition: height 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), margin 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.3s, background-color 0.1s ease;
     }
 
     .transaction-row {
@@ -645,7 +646,7 @@
       cardContainer.addEventListener('touchend', handleReset);
     }
 
-    // --- NATIVES SWIPE TO DELETE SYSTEM (BEIDE RICHTUNGEN) ---
+    // --- NATIVES SWIPE TO DELETE SYSTEM (DYNAMISCHER BACKGROUND CORRECTION) ---
     function rowTouchStart(e) {
       touchStartX = e.touches[0].clientX;
       e.currentTarget.style.transition = 'none';
@@ -654,6 +655,13 @@
     function rowTouchMove(e) {
       touchCurrentX = e.touches[0].clientX;
       const diffX = touchCurrentX - touchStartX;
+      
+      // FIX: Hintergrund erst rot färben, sobald tatsächlich geswiped wird
+      const wrapper = e.currentTarget.parentElement;
+      if (wrapper && Math.abs(diffX) > 4) {
+        wrapper.style.backgroundColor = 'var(--accent-red)';
+      }
+      
       e.currentTarget.style.transform = `translateX(${diffX}px)`;
       const opacity = Math.max(1 - Math.abs(diffX) / 250, 0.4);
       e.currentTarget.style.opacity = opacity;
@@ -684,6 +692,13 @@
       } else {
         row.style.transform = 'translateX(0px)';
         row.style.opacity = '1';
+        
+        // FIX: Hintergrund wieder transparent schalten, wenn Reihe zurückgesetzt wird
+        setTimeout(() => {
+          if (wrapper && row.style.transform === 'translateX(0px)') {
+            wrapper.style.backgroundColor = 'transparent';
+          }
+        }, 250);
       }
       touchStartX = 0;
       touchCurrentX = 0;
