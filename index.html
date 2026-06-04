@@ -275,28 +275,6 @@
       transition: height 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), margin 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.3s;
     }
 
-    /* NEU: Vollflächiger roter Löschhintergrund mit stufenlosem Opacity-Fade */
-    .delete-bg-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: var(--accent-red);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 22px;
-      z-index: 1;
-      opacity: 0;
-      will-change: opacity;
-    }
-
-    .delete-bg-overlay svg {
-      color: #FFFFFF;
-      opacity: 0;
-      transform: scale(0.6);
-      will-change: transform, opacity;
-    }
-
     .transaction-row {
       background: var(--row-bg);
       border: 0.33px solid var(--apple-border);
@@ -307,15 +285,38 @@
       align-items: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       position: relative;
+      overflow: hidden;
       z-index: 2;
       transform: translateX(0px);
       will-change: transform;
     }
 
-    .trans-info { display: flex; flex-direction: column; gap: 2px; }
+    /* NEU: Das rote Overlay sitzt jetzt IM Eintrag drin und bewegt sich mit! */
+    .row-red-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--accent-red);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      will-change: opacity;
+    }
+
+    .row-red-overlay svg {
+      color: #FFFFFF;
+      opacity: 0;
+      transform: scale(0.6);
+      will-change: transform, opacity;
+    }
+
+    .trans-info { display: flex; flex-direction: column; gap: 2px; position: relative; z-index: 2; }
     .trans-title { font-size: 16px; font-weight: 600; }
     .trans-meta { font-size: 12px; color: var(--text-secondary); }
-    .trans-amount { font-size: 16px; font-weight: 700; }
+    .trans-amount { font-size: 16px; font-weight: 700; position: relative; z-index: 2; }
     .trans-amount.income { color: var(--accent-green); }
     .trans-amount.expense { color: var(--text-main); }
 
@@ -666,12 +667,13 @@
       cardContainer.addEventListener('touchend', handleReset);
     }
 
-    // --- NATIVES SWIPE SYSTEM (STUFENLOSER OPACITY FADE ÜBER GANZEN EINTRAG) ---
+    // --- INTERNES SWIPE SYSTEM (GANZER EINTRAG FÄRBT SICH ROT) ---
     function rowTouchStart(e) {
       touchStartX = e.touches[0].clientX;
-      e.currentTarget.style.transition = 'none';
+      const row = e.currentTarget;
+      row.style.transition = 'none';
       
-      const id = e.currentTarget.parentElement.id.split('-')[1];
+      const id = row.id.split('-')[1];
       const bg = document.getElementById(`bg-${id}`);
       if (bg) {
         bg.style.transition = 'none';
@@ -685,22 +687,20 @@
     function rowTouchMove(e) {
       touchCurrentX = e.touches[0].clientX;
       const diffX = touchCurrentX - touchStartX;
-      
-      const id = e.currentTarget.parentElement.id.split('-')[1];
+      const row = e.currentTarget;
+      const id = row.id.split('-')[1];
       const bg = document.getElementById(`bg-${id}`);
       
-      // Row flüssig mitbewegen
-      e.currentTarget.style.transform = `translateX(${diffX}px)`;
+      // Die gesamte Reihe bewegt sich flüssig mit dem Finger mit
+      row.style.transform = `translateX(${diffX}px)`;
 
       if (bg) {
-        // Deckkraft steigt gleichmäßig über den gesamten Eintrag (Maximum bei 130px Swipe)
+        // Deckkraft des internen Overlays blendet absolut synchron ein
         let opacity = Math.min(Math.abs(diffX) / 130, 1);
         bg.style.opacity = opacity;
 
         const trashLeft = bg.querySelector('.trash-left');
         const trashRight = bg.querySelector('.trash-right');
-        
-        // Elastischer Scale & Opacity für die Icons im Hintergrund
         let scale = Math.min(0.6 + (Math.abs(diffX) / 260), 1.1);
 
         if (diffX > 0) {
@@ -716,10 +716,11 @@
     function rowTouchEnd(e, id) {
       const diffX = touchCurrentX - touchStartX;
       const threshold = 130;
-      const wrapper = document.getElementById encapsulation = `wrapper-${id}`;
+      const row = document.getElementById(`row-${id}`);
       const wrapperElement = document.getElementById(`wrapper-${id}`);
       const bg = document.getElementById(`bg-${id}`);
-      const row = e.currentTarget;
+
+      if (!row) return;
 
       row.style.transition = 'transform 0.25s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.25s ease';
       if (bg) {
@@ -734,8 +735,6 @@
         const direction = diffX > 0 ? 1 : -1;
         row.style.transform = `translateX(${direction * window.innerWidth}px)`;
         row.style.opacity = '0';
-        
-        if (bg) bg.style.opacity = '1';
 
         setTimeout(() => {
           if (wrapperElement) {
@@ -748,10 +747,8 @@
           }, 300);
         }, 150);
       } else {
-        // Zurückfedern, falls nicht weit genug gewischt wurde
+        // Sanftes Zurückfedern & Ausblenden der roten Farbe
         row.style.transform = 'translateX(0px)';
-        row.style.opacity = '1';
-        
         if (bg) {
           bg.style.opacity = '0';
           const trashLeft = bg.querySelector('.trash-left');
@@ -810,7 +807,6 @@
       closeModal();
     }
 
-    // Löscht NUR die Historie, lässt das Geld unangetastet
     function deleteTransaction(id) {
       const targetIndex = transactions.findIndex(t => t.id === id);
       if (targetIndex !== -1) {
@@ -848,15 +844,16 @@
         container.innerHTML += `
           <div class="transaction-row-wrapper" id="wrapper-${t.id}" style="height: 72px;">
             
-            <div class="delete-bg-overlay" id="bg-${t.id}">
-              <svg class="trash-left" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-              <svg class="trash-right" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-            </div>
-
-            <div class="transaction-row" 
+            <div class="transaction-row" id="row-${t.id}"
                  ontouchstart="rowTouchStart(event)" 
                  ontouchmove="rowTouchMove(event)" 
                  ontouchend="rowTouchEnd(event, ${t.id})">
+              
+              <div class="row-red-overlay" id="bg-${t.id}">
+                <svg class="trash-left" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                <svg class="trash-right" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+              </div>
+
               <div class="trans-info">
                 <span class="trans-title">${escapeHtml(t.title)}</span>
                 <span class="trans-meta">${t.category} • ${t.date}</span>
