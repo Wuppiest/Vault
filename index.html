@@ -291,7 +291,7 @@
       will-change: transform;
     }
 
-    /* NEU: Das rote Overlay sitzt jetzt IM Eintrag drin und bewegt sich mit! */
+    /* RED OVERLAY: Liegt JETZT über dem Text (z-index: 10) und dunkelt alles ab */
     .row-red-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -300,7 +300,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 22px;
-      z-index: 1;
+      z-index: 10;
       opacity: 0;
       pointer-events: none;
       will-change: opacity;
@@ -313,10 +313,10 @@
       will-change: transform, opacity;
     }
 
-    .trans-info { display: flex; flex-direction: column; gap: 2px; position: relative; z-index: 2; }
+    .trans-info { display: flex; flex-direction: column; gap: 2px; }
     .trans-title { font-size: 16px; font-weight: 600; }
     .trans-meta { font-size: 12px; color: var(--text-secondary); }
-    .trans-amount { font-size: 16px; font-weight: 700; position: relative; z-index: 2; }
+    .trans-amount { font-size: 16px; font-weight: 700; }
     .trans-amount.income { color: var(--accent-green); }
     .trans-amount.expense { color: var(--text-main); }
 
@@ -667,7 +667,7 @@
       cardContainer.addEventListener('touchend', handleReset);
     }
 
-    // --- INTERNES SWIPE SYSTEM (GANZER EINTRAG FÄRBT SICH ROT) ---
+    // --- INNERES SWIPE SYSTEM (GANZER EINTRAG WIRD SMOOTH ROT) ---
     function rowTouchStart(e) {
       touchStartX = e.touches[0].clientX;
       const row = e.currentTarget;
@@ -691,11 +691,11 @@
       const id = row.id.split('-')[1];
       const bg = document.getElementById(`bg-${id}`);
       
-      // Die gesamte Reihe bewegt sich flüssig mit dem Finger mit
+      // Das Element bewegt sich flüssig mit dem Wisch mit
       row.style.transform = `translateX(${diffX}px)`;
 
       if (bg) {
-        // Deckkraft des internen Overlays blendet absolut synchron ein
+        // Deckkraft regelt sich exakt synchron hoch und legt sich über den Text
         let opacity = Math.min(Math.abs(diffX) / 130, 1);
         bg.style.opacity = opacity;
 
@@ -747,7 +747,7 @@
           }, 300);
         }, 150);
       } else {
-        // Sanftes Zurückfedern & Ausblenden der roten Farbe
+        // Zurückfedern und sanftes Ausblenden des Overlays
         row.style.transform = 'translateX(0px)';
         if (bg) {
           bg.style.opacity = '0';
