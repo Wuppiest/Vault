@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Vault">
   
-  <link class="apple-touch-icon" rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0C'/%3E%3Ccircle cx='90' cy='90' r='40' fill='none' stroke='%23D4AF37' stroke-width='8'/%3E%3Cpath d='M90 30 L90 50 M90 130 L90 150 M30 90 L50 90 M130 90 L150 90' stroke='%23D4AF37' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='10' fill='%23D4AF37'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0C'/%3E%3Ccircle cx='90' cy='90' r='40' fill='none' stroke='%23D4AF37' stroke-width='8'/%3E%3Cpath d='M90 30 L90 50 M90 130 L90 150 M30 90 L50 90 M130 90 L150 90' stroke='%23D4AF37' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='10' fill='%23D4AF37'/%3E%3C/svg%3E">
 
   <title>Vault - Personal 3D Edition</title>
   <style>
@@ -270,11 +270,28 @@
     .transaction-row-wrapper {
       position: relative;
       width: 100%;
-      /* FIX: Auf transparent gesetzt, um Kanten-Bleeding im Stillstand zu verhindern */
       background: transparent; 
       border-radius: 20px;
       overflow: hidden;
-      transition: height 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), margin 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.3s, background-color 0.1s ease;
+      transition: height 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), margin 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.3s;
+    }
+
+    /* NEU: Apple Swipe Delete Background-Card */
+    .delete-background {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--accent-red);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0; /* Standardmäßig komplett unsichtbar */
+      pointer-events: none;
+      z-index: 1;
     }
 
     .transaction-row {
@@ -287,7 +304,7 @@
       align-items: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       position: relative;
-      z-index: 2;
+      z-index: 2; /* Liegt exakt über dem roten Hintergrund */
       transform: translateX(0px);
       will-change: transform;
     }
@@ -646,20 +663,24 @@
       cardContainer.addEventListener('touchend', handleReset);
     }
 
-    // --- NATIVES SWIPE TO DELETE SYSTEM (DYNAMISCHER BACKGROUND CORRECTION) ---
+    // --- NATIVES SWIPE TO DELETE SYSTEM (APPLE REVEAL STYLE) ---
     function rowTouchStart(e) {
       touchStartX = e.touches[0].clientX;
       e.currentTarget.style.transition = 'none';
+      
+      const bg = e.currentTarget.parentElement.querySelector('.delete-background');
+      if (bg) bg.style.transition = 'none';
     }
 
     function rowTouchMove(e) {
       touchCurrentX = e.touches[0].clientX;
       const diffX = touchCurrentX - touchStartX;
       
-      // FIX: Hintergrund erst rot färben, sobald tatsächlich geswiped wird
-      const wrapper = e.currentTarget.parentElement;
-      if (wrapper && Math.abs(diffX) > 4) {
-        wrapper.style.backgroundColor = 'var(--accent-red)';
+      const bg = e.currentTarget.parentElement.querySelector('.delete-background');
+      
+      // Das Rot blendet sich erst ein, wenn der Finger wirklich swipet (> 8px)
+      if (bg && Math.abs(diffX) > 8) {
+        bg.style.opacity = '1';
       }
       
       e.currentTarget.style.transform = `translateX(${diffX}px)`;
@@ -671,6 +692,7 @@
       const diffX = touchCurrentX - touchStartX;
       const threshold = 130;
       const wrapper = document.getElementById(`wrapper-${id}`);
+      const bg = document.getElementById(`bg-${id}`);
       const row = e.currentTarget;
 
       row.style.transition = 'transform 0.25s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.25s ease';
@@ -681,24 +703,24 @@
         row.style.opacity = '0';
 
         setTimeout(() => {
-          wrapper.style.height = '0px';
-          wrapper.style.marginBottom = '0px';
-          wrapper.style.opacity = '0';
-          
+          if (wrapper) {
+            wrapper.style.height = '0px';
+            wrapper.style.marginBottom = '0px';
+            wrapper.style.opacity = '0';
+          }
           setTimeout(() => {
             deleteTransaction(id);
           }, 300);
         }, 150);
       } else {
+        // Zurücksetzen, falls nicht weit genug gezogen wurde
         row.style.transform = 'translateX(0px)';
         row.style.opacity = '1';
         
-        // FIX: Hintergrund wieder transparent schalten, wenn Reihe zurückgesetzt wird
-        setTimeout(() => {
-          if (wrapper && row.style.transform === 'translateX(0px)') {
-            wrapper.style.backgroundColor = 'transparent';
-          }
-        }, 250);
+        if (bg) {
+          bg.style.transition = 'opacity 0.2s ease';
+          bg.style.opacity = '0'; // Blendet sich wieder elegant aus
+        }
       }
       touchStartX = 0;
       touchCurrentX = 0;
@@ -786,7 +808,11 @@
         const displayAmount = formatCurrency(Math.abs(t.amount));
 
         container.innerHTML += `
-          <div class="transaction-row-wrapper" id="wrapper-${t.id}" style="height: 72px; margin-bottom: 0px;">
+          <div class="transaction-row-wrapper" id="wrapper-${t.id}" style="height: 72px;">
+            <div class="delete-background" id="bg-${t.id}">
+              <span>Löschen</span>
+              <span>Löschen</span>
+            </div>
             <div class="transaction-row" 
                  ontouchstart="rowTouchStart(event)" 
                  ontouchmove="rowTouchMove(event)" 
