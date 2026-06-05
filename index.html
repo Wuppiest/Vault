@@ -71,17 +71,13 @@
       color: var(--text-main);
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .profile-circle:active {
-      transform: scale(0.92);
     }
 
     .main-content {
       flex: 1;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
-      padding: 12px 24px 140px; /* Platz für Tab-Bar unten */
+      padding: 12px 24px 140px;
     }
 
     .tab-view {
@@ -90,7 +86,7 @@
       gap: 28px;
     }
 
-    /* 3D CARD PERSPECTIVE CONTAINER */
+    /* CARD 3D Engine */
     .card-perspective {
       perspective: 1200px;
       width: 100%;
@@ -133,13 +129,8 @@
       font-size: 20px;
       font-weight: 500;
       color: rgba(255, 255, 255, 0.85);
-      letter-spacing: -0.5px;
     }
-    .n26-logo span {
-      border-top: 2px solid rgba(255, 255, 255, 0.85);
-      padding-top: 1px;
-      margin-right: -1px;
-    }
+    .n26-logo span { border-top: 2px solid rgba(255, 255, 255, 0.85); padding-top: 1px; }
 
     .card-chip {
       width: 42px;
@@ -147,8 +138,6 @@
       background: linear-gradient(135deg, #f0d090 0%, #c5a059 50%, #a37e36 100%);
       border-radius: 6px;
       margin-top: 16px;
-      position: relative;
-      box-shadow: inset 0 1px 2px rgba(255,255,255,0.3);
     }
 
     .balance-overlay {
@@ -156,22 +145,18 @@
       right: 24px;
       top: 45px;
       text-align: right;
-      transform: translateZ(40px);
     }
     .balance-label {
       font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 0.5px;
     }
     .balance-val {
       font-size: 32px;
       font-weight: 700;
       color: #FFFFFF;
-      letter-spacing: -1px;
       margin-top: 2px;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .card-bottom-bar {
@@ -184,14 +169,12 @@
       justify-content: space-between;
       align-items: center;
       padding: 0 24px;
-      z-index: 2;
     }
 
     .card-holder-name {
       font-size: 14px;
       font-weight: 500;
       color: #1C1C1E;
-      letter-spacing: 0.5px;
       text-transform: uppercase;
     }
 
@@ -206,7 +189,7 @@
     .mc-red { background: #EB001B; left: 0; }
     .mc-yellow { background: #FF5F00; right: 0; opacity: 0.9; }
 
-    /* ACTION GRID BUTTONS STYLING */
+    /* ACTION GRID (2 WEISS, 2 SCHWARZ) */
     .action-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -225,37 +208,33 @@
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: transform 0.1s, opacity 0.2s;
+      transition: transform 0.1s;
       padding: 8px 4px;
       text-align: center;
       line-height: 1.2;
     }
-    .action-btn:active { 
-      transform: scale(0.92);
-      opacity: 0.8;
-    }
+    .action-btn:active { transform: scale(0.92); }
 
-    /* Linke Buttons: WEISS */
+    /* Links: Geld bekommen (Weiß) */
     .action-btn.btn-white {
       background: #FFFFFF;
       color: #000000;
       border: none;
     }
 
-    /* Rechte Buttons: SCHWARZ */
+    /* Rechts: Geld geht weg (Schwarz) */
     .action-btn.btn-black {
       background: #000000;
       color: #FFFFFF;
       border: 0.33px solid var(--apple-border);
     }
 
-    /* TRANSACTIONS & SWIPING */
+    /* LISTS & RELIABLE SWIPING */
     .section-title {
       font-size: 14px;
       text-transform: uppercase;
       color: var(--text-secondary);
       font-weight: 700;
-      letter-spacing: 0.5px;
       margin-bottom: 12px;
       padding-left: 4px;
     }
@@ -264,7 +243,6 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      overflow: hidden;
     }
 
     .transaction-row-wrapper {
@@ -272,7 +250,8 @@
       width: 100%;
       background: transparent; 
       border-radius: 20px;
-      transition: height 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), margin 0.3s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.3s;
+      overflow: hidden;
+      transition: height 0.25s ease, margin 0.25s ease;
     }
 
     .transaction-row {
@@ -283,33 +262,29 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       position: relative;
-      overflow: hidden;
       z-index: 2;
       transform: translateX(0px);
-      will-change: transform;
+      touch-action: pan-y; /* Erlaubt vertikales Scrollen der Seite, blockiert horizontales Ruckeln */
+      user-select: none;
     }
 
-    .row-red-overlay {
+    .row-action-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 22px;
-      z-index: 10;
+      padding: 0 24px;
+      z-index: 1;
       opacity: 0;
-      pointer-events: none;
-      will-change: opacity, background-color;
       border-radius: 20px;
+      pointer-events: none;
     }
 
-    .row-red-overlay svg {
+    .row-action-overlay svg {
       color: #FFFFFF;
-      opacity: 0;
-      transform: scale(0.6);
-      will-change: transform, opacity;
+      transition: transform 0.1s ease;
     }
 
     .trans-info { display: flex; flex-direction: column; gap: 2px; }
@@ -319,7 +294,7 @@
     .trans-amount.income { color: var(--accent-green); }
     .trans-amount.expense { color: var(--text-main); }
 
-    /* NATIVE IOS BOTTOM TAB BAR */
+    /* NATIVE BOTTOM TAB BAR */
     .tab-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -331,7 +306,7 @@
       display: flex;
       justify-content: space-around;
       padding-top: 10px;
-      padding-bottom: 26px; /* Safe Area Schutz */
+      padding-bottom: 26px;
       z-index: 90;
     }
 
@@ -345,25 +320,12 @@
       font-weight: 600;
       cursor: pointer;
       width: 90px;
-      transition: color 0.2s ease;
     }
 
-    .tab-item.active {
-      color: var(--text-main);
-    }
+    .tab-item.active { color: var(--text-main); }
+    .tab-item svg { width: 24px; height: 24px; stroke: currentColor; }
 
-    .tab-item svg {
-      width: 24px;
-      height: 24px;
-      stroke: currentColor;
-      transition: transform 0.1s;
-    }
-    
-    .tab-item:active svg {
-      transform: scale(0.9);
-    }
-
-    /* MODAL SLIDE SHEET */
+    /* MODAL SHEETS */
     .modal-sheet {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -375,8 +337,7 @@
       border-radius: 30px 30px 0 0;
       z-index: 100;
       transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.15, 0.85, 0.35, 1);
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+      transition: transform 0.35s cubic-bezier(0.15, 0.85, 0.35, 1);
     }
     .modal-sheet.active { transform: translateY(12%); }
 
@@ -389,7 +350,6 @@
     }
     .modal-title { font-size: 17px; font-weight: 600; }
     .modal-btn { color: #FFFFFF; font-size: 16px; cursor: pointer; }
-    .modal-btn:active { opacity: 0.4; }
 
     .modal-content {
       padding: 24px 24px;
@@ -411,7 +371,6 @@
       color: var(--text-secondary);
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.5px;
       margin-bottom: 4px;
     }
     .input-box input, .input-box select {
@@ -442,42 +401,40 @@
       flex-direction: column;
       justify-content: center;
       padding: 40px 32px;
-      transform: translateY(0);
-      transition: transform 0.5s cubic-bezier(0.15, 0.85, 0.35, 1);
     }
-    .onboarding-overlay.hidden { transform: translateY(-100%); pointer-events: none; }
+    .onboarding-overlay.hidden { display: none; }
     .onboarding-brand { text-align: center; margin-bottom: 48px; }
-    .onboarding-title { font-size: 34px; font-weight: 800; letter-spacing: -1.5px; margin-top: 16px; }
-    .onboarding-subtitle { font-size: 16px; color: var(--text-secondary); margin-top: 8px; }
+    .onboarding-title { font-size: 34px; font-weight: 800; margin-top: 16px; }
   </style>
 </head>
 <body>
 
+  <!-- SETUP ONBOARDING -->
   <div id="onboarding-screen" class="onboarding-overlay hidden">
     <div class="onboarding-brand">
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width="90" height="90">
         <rect width='180' height='180' rx='40' fill='#1C1C1E' />
         <circle cx='90' cy='90' r='35' fill='none' stroke='#D4AF37' stroke-width='7' />
-        <path d='M90 35 L90 50 M90 130 L90 145 M35 90 L50 90 M130 90 L145 90' stroke='#D4AF37' stroke-width='7' stroke-linecap='round' />
-        <circle cx='90' cy='90' r='9' fill='#D4AF37' />
       </svg>
       <h2 class="onboarding-title">Willkommen bei Vault</h2>
-      <p class="onboarding-subtitle">Erstelle dein hochgradig verschlüsseltes, personalisiertes Finanz-Dashboard.</p>
     </div>
     <div class="input-box" style="margin-bottom: 24px; background: #1C1C1E;">
       <label>Dein vollständiger Name</label>
-      <input type="text" id="login-username" placeholder="z.B. Max Mustermann" autocomplete="off">
+      <input type="text" id="login-username" placeholder="z.B. Max Mustermann">
     </div>
     <button class="action-btn btn-white" style="width: 100%; padding: 18px; aspect-ratio: auto;" onclick="handleLogin()">Einrichten starten</button>
   </div>
 
+  <!-- HEADER -->
   <header>
     <h1 id="app-title-text">Vault</h1>
     <div class="profile-circle" id="profile-initials" onclick="openSettings()">--</div>
   </header>
 
+  <!-- CONTENT WRAPPER -->
   <div class="main-content">
     
+    <!-- DASHBOARD TAB VIEW -->
     <div id="dashboard-view" class="tab-view">
       <div class="card-perspective" id="card-trigger">
         <div class="n26-card" id="3d-card">
@@ -491,7 +448,7 @@
             </div>
           </div>
           <div class="card-bottom-bar">
-            <div class="card-holder-name" id="card-holder-display">Gast-Nutzer</div>
+            <div class="card-holder-name" id="card-holder-display">Gast</div>
             <div class="mastercard-logo">
               <div class="mc-circle mc-red"></div>
               <div class="mc-circle mc-yellow"></div>
@@ -500,21 +457,24 @@
         </div>
       </div>
 
+      <!-- QUICK ACTIONS GRID -->
       <div class="action-grid">
+        <!-- 2 LINKE BUTTONS: WEISS -->
         <button class="action-btn btn-white" onclick="openModal('income', false)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           <span>Einnahme</span>
         </button>
         <button class="action-btn btn-white" onclick="openModal('income', true)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5"><path d="M21 13v1a4 4 0 0 1-4 4H3"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="17 1 21 5 17 9"></polyline></svg>
           <span>Dauerauftr.<br>Einnahme</span>
         </button>
+        <!-- 2 RECHTE BUTTONS: SCHWARZ -->
         <button class="action-btn btn-black" onclick="openModal('expense', true)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2.5" stroke-linecap="round"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2.5"><path d="M21 13v1a4 4 0 0 1-4 4H3"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="17 1 21 5 17 9"></polyline></svg>
           <span>Dauerauftr.<br>Ausgabe</span>
         </button>
         <button class="action-btn btn-black" onclick="openModal('expense', false)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           <span>Ausgabe</span>
         </button>
       </div>
@@ -525,6 +485,7 @@
       </div>
     </div>
 
+    <!-- DAUERAUFTRÄGE DETAILED TAB VIEW -->
     <div id="recurring-view" class="tab-view" style="display: none;">
       <div>
         <div class="section-title">Aktive Daueraufträge</div>
@@ -537,17 +498,19 @@
 
   </div>
 
+  <!-- FIXED IOS TAB BAR -->
   <nav class="tab-bar">
     <div class="tab-item active" id="tab-dashboard" onclick="switchTab('dashboard')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
       <span>Dashboard</span>
     </div>
     <div class="tab-item" id="tab-recurring" onclick="switchTab('recurring')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
       <span>Daueraufträge</span>
     </div>
   </nav>
 
+  <!-- TRANSACTION MODAL -->
   <div id="transaction-modal" class="modal-sheet">
     <div class="modal-header">
       <span class="modal-btn" onclick="closeModal()">Abbrechen</span>
@@ -561,7 +524,7 @@
       </div>
       <div class="input-box">
         <label>Titel / Verwendungszweck</label>
-        <input type="text" id="input-title" placeholder="z.B. Discord Nitro, Snacks...">
+        <input type="text" id="input-title" placeholder="z.B. Gaming, Snacks...">
       </div>
       <div class="input-box">
         <label>Kategorie</label>
@@ -575,7 +538,7 @@
         </select>
       </div>
       <div class="input-box" id="interval-box" style="display: none;">
-        <label>Intervall (Wiederholung)</label>
+        <label>Intervall</label>
         <select id="input-interval">
           <option value="monatlich">Monatlich</option>
           <option value="wöchentlich">Wöchentlich</option>
@@ -584,10 +547,11 @@
     </div>
   </div>
 
+  <!-- SETTINGS MODAL -->
   <div id="settings-modal" class="modal-sheet">
     <div class="modal-header">
       <span class="modal-btn" onclick="closeSettings()">Schließen</span>
-      <span class="modal-title">Account-Einstellungen</span>
+      <span class="modal-title">Einstellungen</span>
       <span class="modal-btn" style="font-weight: 600; color: var(--accent-green);" onclick="saveProfileChanges()">Sichern</span>
     </div>
     <div class="modal-content">
@@ -596,7 +560,7 @@
         <input type="text" id="settings-username-input">
       </div>
       <button class="settings-danger-btn" onclick="handleLogout()" style="margin-top: 24px;">Abmelden</button>
-      <button class="settings-danger-btn" style="background: rgba(255,38,38,0.05); border-color: transparent; margin-top: 4px;" onclick="resetAllData()">Alle App-Daten löschen</button>
+      <button class="settings-danger-btn" style="background: rgba(255,38,38,0.05); border-color: transparent;" onclick="resetAllData()">Alles löschen</button>
     </div>
   </div>
 
@@ -606,14 +570,12 @@
     let username = localStorage.getItem('vault_username') || "";
     let currentType = 'income';
     let isRecurringMode = false;
-    let editingRecurringId = null; // Speichert ID, falls ein Dauerauftrag editiert wird
+    let editingRecurringId = null;
 
-    const cardContainer = document.getElementById('card-trigger');
-    const cardElement = document.getElementById('3d-card');
-    const glareElement = document.getElementById('card-glare');
-
-    let touchStartX = 0;
-    let touchCurrentX = 0;
+    // Pointer-Gesture State Machine
+    let activeRow = null;
+    let startX = 0;
+    let isDragging = false;
 
     window.onload = function() {
       checkAuth();
@@ -628,7 +590,6 @@
         document.getElementById('card-holder-display').innerText = username;
         document.getElementById('profile-initials').innerText = getInitials(username);
         document.getElementById('settings-username-input').value = username;
-        
         checkRecurringOrders();
         updateUI();
         updateRecurringUI();
@@ -649,7 +610,6 @@
       return name.substring(0, 2).toUpperCase();
     }
 
-    // --- TAB SWITCHER AUTOMATION ---
     function switchTab(tabName) {
       const dbView = document.getElementById('dashboard-view');
       const recView = document.getElementById('recurring-view');
@@ -674,212 +634,177 @@
       }
     }
 
-    // --- EXECUTE AUTOMATED RECURRING LOGIC ---
-    function checkRecurringOrders() {
-      let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
-      let updated = false;
-      const now = new Date();
-
-      recurringList.forEach(order => {
-        if (!order.nextDate) return;
-        let nextExecution = new Date(order.nextDate);
-
-        while (now >= nextExecution) {
-          const automatedTx = {
-            id: Date.now() + Math.random(),
-            title: order.title + " (Dauerauftrag)",
-            category: order.category,
-            amount: order.amount,
-            date: nextExecution.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
-          };
-
-          transactions.unshift(automatedTx);
-          currentBalance += order.amount;
-
-          if (order.interval === 'monatlich') {
-            nextExecution.setMonth(nextExecution.getMonth() + 1);
-          } else if (order.interval === 'wöchentlich') {
-            nextExecution.setDate(nextExecution.getDate() + 7);
-          }
-          order.nextDate = nextExecution.toISOString();
-          updated = true;
-        }
-      });
-
-      if (updated) {
-        saveToStorage();
-        localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
-      }
-    }
-
-    // --- 3D CARD PARALLAX ENGINE ---
-    function setup3DEffect() {
-      const handleMove = (e) => {
-        if (document.getElementById('dashboard-view').style.display === 'none') return;
-        const rect = cardContainer.getBoundingClientRect();
-        let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
-        const midX = rect.width / 2;
-        const midY = rect.height / 2;
-
-        const rotateX = ((midY - y) / midY) * 15;
-        const rotateY = ((x - midX) / midX) * 15;
-
-        cardElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        const glareX = (x / rect.width) * 100;
-        const glareY = (y / rect.height) * 100;
-        glareElement.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.2) 0%, transparent 60%)`;
-      };
-
-      const handleReset = () => {
-        cardElement.style.transform = 'rotateX(0deg) rotateY(0deg)';
-        glareElement.style.background = `linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%)`;
-      };
-
-      cardContainer.addEventListener('mousemove', handleMove);
-      cardContainer.addEventListener('mouseleave', handleReset);
-      cardContainer.addEventListener('touchmove', handleMove, { passive: true });
-      cardContainer.addEventListener('touchend', handleReset);
-    }
-
-    // --- GESTURE SYSTEM: SWIPE FOR KONTOAKTIVITÄTEN ---
-    function rowTouchStart(e) {
-      touchStartX = e.touches[0].clientX;
-      const row = e.currentTarget;
-      row.style.transition = 'none';
-      const id = row.id.split('-')[1];
-      const bg = document.getElementById(`bg-${id}`);
+    // --- REVOLUTIONARY UNIFIED POINTER SWIPE ENGINE ---
+    function pointerDownHandler(e, id, isRecurring) {
+      activeRow = e.currentTarget;
+      startX = e.clientX;
+      isDragging = true;
+      
+      // Weist das Element an, Pointer-Events zu verfolgen, selbst wenn man die Zeile verlässt
+      activeRow.setPointerCapture(e.pointerId);
+      
+      activeRow.style.transition = 'none';
+      const bg = document.getElementById((isRecurring ? 'rec-bg-' : 'bg-') + id);
       if (bg) bg.style.transition = 'none';
     }
 
-    function rowTouchMove(e) {
-      touchCurrentX = e.touches[0].clientX;
-      const diffX = touchCurrentX - touchStartX;
-      const row = e.currentTarget;
-      const id = row.id.split('-')[1];
-      const bg = document.getElementById(`bg-${id}`);
+    function pointerMoveHandler(e, id, isRecurring) {
+      if (!isDragging || !activeRow) return;
+      const diffX = e.clientX - startX;
       
-      if (diffX > 0) return; // Nur Links-Swipe erlaubt im Dashboard
+      // Dashboard erlaubt nur Wischen nach links (löschen)
+      if (!isRecurring && diffX > 0) return;
 
-      row.style.transform = `translateX(${diffX}px)`;
+      activeRow.style.transform = `translateX(${diffX}px)`;
+      
+      const bg = document.getElementById((isRecurring ? 'rec-bg-' : 'bg-') + id);
       if (bg) {
-        let opacity = Math.min(Math.abs(diffX) / 130, 1);
+        let opacity = Math.min(Math.abs(diffX) / 140, 1);
         bg.style.opacity = opacity;
-        bg.style.backgroundColor = 'var(--accent-red)';
-        const trashRight = bg.querySelector('.trash-right');
-        if (trashRight) {
-          trashRight.style.opacity = opacity;
-          trashRight.style.transform = `scale(${Math.min(0.6 + (Math.abs(diffX) / 260), 1.1)})`;
-        }
-      }
-    }
-
-    function rowTouchEnd(e, id) {
-      const diffX = touchCurrentX - touchStartX;
-      const threshold = -130;
-      const row = document.getElementById(`row-${id}`);
-      const wrapperElement = document.getElementById(`wrapper-${id}`);
-      const bg = document.getElementById(`bg-${id}`);
-
-      if (!row) return;
-      row.style.transition = 'transform 0.25s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.25s ease';
-
-      if (diffX < threshold && touchStartX !== 0 && touchCurrentX !== 0) {
-        row.style.transform = `translateX(-${window.innerWidth}px)`;
-        row.style.opacity = '0';
-        setTimeout(() => {
-          if (wrapperElement) {
-            wrapperElement.style.height = '0px';
-            wrapperElement.style.marginBottom = '0px';
+        
+        if (isRecurring) {
+          const iconEdit = bg.querySelector('.icon-edit');
+          const iconTrash = bg.querySelector('.icon-trash');
+          
+          if (diffX > 0) {
+            // Nach rechts wischen -> Bearbeiten (iOS Blau)
+            bg.style.backgroundColor = 'var(--accent-blue)';
+            if (iconEdit) { iconEdit.style.opacity = opacity; iconEdit.style.transform = `scale(${Math.min(0.6 + (diffX/240), 1.1)})`; }
+            if (iconTrash) iconTrash.style.opacity = '0';
+          } else {
+            // Nach links wischen -> Löschen (Rot)
+            bg.style.backgroundColor = 'var(--accent-red)';
+            if (iconTrash) { iconTrash.style.opacity = opacity; iconTrash.style.transform = `scale(${Math.min(0.6 + (Math.abs(diffX)/240), 1.1)})`; }
+            if (iconEdit) iconEdit.style.opacity = '0';
           }
-          setTimeout(() => { deleteTransaction(id); }, 250);
-        }, 100);
-      } else {
-        row.style.transform = 'translateX(0px)';
-        if (bg) bg.style.opacity = '0';
-      }
-      touchStartX = 0; touchCurrentX = 0;
-    }
-
-    // --- TWO-WAY GESTURES SYSTEM: DAUERAUFTRÄGE TAB (LINKS = LÖSCHEN, RECHTS = BEARBEITEN) ---
-    function recTouchStart(e) {
-      touchStartX = e.touches[0].clientX;
-      const row = e.currentTarget;
-      row.style.transition = 'none';
-      const id = row.id.split('-')[2];
-      const bg = document.getElementById(`rec-bg-${id}`);
-      if (bg) bg.style.transition = 'none';
-    }
-
-    function recTouchMove(e) {
-      touchCurrentX = e.touches[0].clientX;
-      const diffX = touchCurrentX - touchStartX;
-      const row = e.currentTarget;
-      const id = row.id.split('-')[2];
-      const bg = document.getElementById(`rec-bg-${id}`);
-      
-      row.style.transform = `translateX(${diffX}px)`;
-
-      if (bg) {
-        let opacity = Math.min(Math.abs(diffX) / 130, 1);
-        bg.style.opacity = opacity;
-        const iconEdit = bg.querySelector('.icon-edit');
-        const iconTrash = bg.querySelector('.icon-trash');
-        let scale = Math.min(0.6 + (Math.abs(diffX) / 260), 1.1);
-
-        if (diffX > 0) {
-          // Rechts-Swipe -> Bearbeiten (iOS Blau)
-          bg.style.backgroundColor = 'var(--accent-blue)';
-          if (iconEdit) { iconEdit.style.opacity = opacity; iconEdit.style.transform = `scale(${scale})`; }
-          if (iconTrash) iconTrash.style.opacity = '0';
         } else {
-          // Links-Swipe -> Löschen (Rot)
+          // Dashboard Standard-Aktivitäten (Nur Löschen möglich)
           bg.style.backgroundColor = 'var(--accent-red)';
-          if (iconTrash) { iconTrash.style.opacity = opacity; iconTrash.style.transform = `scale(${scale})`; }
-          if (iconEdit) iconEdit.style.opacity = '0';
+          const trashRight = bg.querySelector('.trash-right');
+          if (trashRight) { trashRight.style.opacity = opacity; trashRight.style.transform = `scale(${Math.min(0.6 + (Math.abs(diffX)/240), 1.1)})`; }
         }
       }
     }
 
-    function recTouchEnd(e, id) {
-      const diffX = touchCurrentX - touchStartX;
-      const threshold = 130;
-      const row = document.getElementById(`rec-row-${id}`);
-      const bg = document.getElementById(`rec-bg-${id}`);
+    function pointerUpHandler(e, id, isRecurring) {
+      if (!isDragging || !activeRow) return;
+      isDragging = false;
+      const diffX = e.clientX - startX;
+      const threshold = 120;
+      
+      activeRow.releasePointerCapture(e.pointerId);
+      activeRow.style.transition = 'transform 0.25s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.25s ease';
+      
+      const bg = document.getElementById((isRecurring ? 'rec-bg-' : 'bg-') + id);
+      if (bg) bg.style.transition = 'opacity 0.2s ease';
 
-      if (!row) return;
-      row.style.transition = 'transform 0.25s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.25s ease';
-
-      if (touchStartX !== 0 && touchCurrentX !== 0) {
+      if (isRecurring) {
         if (diffX < -threshold) {
-          // Vollständiger Links-Swipe -> Löschen
-          row.style.transform = `translateX(-${window.innerWidth}px)`;
-          row.style.opacity = '0';
-          setTimeout(() => {
-            deleteRecurringOrder(id);
-          }, 200);
+          // Links gewischt -> Dauerauftrag löschen
+          activeRow.style.transform = `translateX(-100%)`;
+          activeRow.style.opacity = '0';
+          setTimeout(() => { deleteRecurringOrder(id); }, 200);
         } else if (diffX > threshold) {
-          // Vollständiger Rechts-Swipe -> Bearbeiten Modus aufrufen
-          row.style.transform = 'translateX(0px)';
+          // Rechts gewischt -> Dauerauftrag bearbeiten
+          activeRow.style.transform = 'translateX(0px)';
           if (bg) bg.style.opacity = '0';
-          setTimeout(() => { openEditRecurringModal(id); }, 150);
+          setTimeout(() => { openEditRecurringModal(id); }, 50);
         } else {
-          // Abgebrochen -> Zurückfedern
-          row.style.transform = 'translateX(0px)';
+          // Nicht weit genug gewischt -> Zurückfedern
+          activeRow.style.transform = 'translateX(0px)';
+          if (bg) bg.style.opacity = '0';
+        }
+      } else {
+        // Dashboard Aktivitäten
+        if (diffX < -threshold) {
+          activeRow.style.transform = `translateX(-100%)`;
+          activeRow.style.opacity = '0';
+          const wrapper = document.getElementById(`wrapper-${id}`);
+          setTimeout(() => {
+            if (wrapper) { wrapper.style.height = '0px'; wrapper.style.marginBottom = '0px'; }
+            setTimeout(() => { deleteTransaction(id); }, 200);
+          }, 50);
+        } else {
+          activeRow.style.transform = 'translateX(0px)';
           if (bg) bg.style.opacity = '0';
         }
       }
-      touchStartX = 0; touchCurrentX = 0;
+      activeRow = null;
     }
 
-    // --- MODAL ENGINE (HINZUFÜGEN & EDITIEREN) ---
+    // --- INTERFACE GENERATION & RENDERING ---
+    function updateUI() {
+      document.getElementById('total-balance').innerText = formatCurrency(currentBalance);
+      const container = document.getElementById('transaction-container');
+      container.innerHTML = '';
+
+      if (transactions.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; margin-top: 24px; font-size: 15px;">Noch keine Kontobewegungen.</p>';
+        return;
+      }
+
+      transactions.forEach(t => {
+        const isIncome = t.amount > 0;
+        container.innerHTML += `
+          <div class="transaction-row-wrapper" id="wrapper-${t.id}" style="height: 72px; margin-bottom: 0px;">
+            <div class="transaction-row" id="row-${t.id}" 
+                 onpointerdown="pointerDownHandler(event, ${t.id}, false)" 
+                 onpointermove="pointerMoveHandler(event, ${t.id}, false)" 
+                 onpointerup="pointerUpHandler(event, ${t.id}, false)">
+              <div class="row-action-overlay" id="bg-${t.id}">
+                <div></div>
+                <svg class="trash-right" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </div>
+              <div class="trans-info">
+                <span class="trans-title">${escapeHtml(t.title)}</span>
+                <span class="trans-meta">${t.category} • ${t.date}</span>
+              </div>
+              <div class="trans-amount ${isIncome ? 'income' : 'expense'}">${isIncome ? '＋ ' : '－ '}${formatCurrency(Math.abs(t.amount))}</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function updateRecurringUI() {
+      const container = document.getElementById('recurring-tab-container');
+      let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
+      container.innerHTML = '';
+
+      if (recurringList.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; margin-top: 24px; font-size: 15px;">Keine aktiven Daueraufträge.</p>';
+        return;
+      }
+
+      recurringList.forEach(r => {
+        const isIncome = r.amount > 0;
+        const intervalLabel = r.interval === 'monatlich' ? 'Monatlich' : 'Wöchentlich';
+        container.innerHTML += `
+          <div class="transaction-row-wrapper" id="rec-wrapper-${r.id}" style="height: 72px;">
+            <div class="transaction-row" id="rec-row-${r.id}" 
+                 onpointerdown="pointerDownHandler(event, ${r.id}, true)" 
+                 onpointermove="pointerMoveHandler(event, ${r.id}, true)" 
+                 onpointerup="pointerUpHandler(event, ${r.id}, true)">
+              <div class="row-action-overlay" id="rec-bg-${r.id}">
+                <svg class="icon-edit" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                <svg class="icon-trash" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </div>
+              <div class="trans-info">
+                <span class="trans-title">${escapeHtml(r.title)}</span>
+                <span class="trans-meta">${r.category} • ${intervalLabel}</span>
+              </div>
+              <div class="trans-amount ${isIncome ? 'income' : 'expense'}">${isIncome ? '＋ ' : '－ '}${formatCurrency(Math.abs(r.amount))}</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // --- TRANSACTION CREATION & MUTATION MANAGEMENT ---
     function openModal(type, recurring = false) {
       currentType = type;
       isRecurringMode = recurring;
-      editingRecurringId = null; // Standard Reset
+      editingRecurringId = null;
       
       if (recurring) {
         document.getElementById('modal-view-title').innerText = type === 'income' ? 'Dauerauftrag Einnahme' : 'Dauerauftrag Ausgabe';
@@ -925,7 +850,7 @@
       const categoryStr = document.getElementById('input-category').value;
 
       if (!amountStr || parseFloat(amountStr) <= 0 || !titleStr) {
-        alert('Bitte gib verlässliche Betrags- und Titel-Daten ein.');
+        alert('Bitte gib einen gültigen Betrag und Verwendungszweck ein.');
         return;
       }
 
@@ -935,7 +860,7 @@
       let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
 
       if (editingRecurringId !== null) {
-        // BEARBEITUNGSMODUS: Bestehenden Eintrag aktualisieren
+        // Dauerauftrag bearbeiten
         const idx = recurringList.findIndex(r => r.id === editingRecurringId);
         if (idx !== -1) {
           recurringList[idx].title = titleStr;
@@ -946,7 +871,7 @@
         localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
         editingRecurringId = null;
       } else if (isRecurringMode) {
-        // NEUER DAUERAUFTRAG
+        // Neuer Dauerauftrag anlegen
         const interval = document.getElementById('input-interval').value;
         let nextExecDate = new Date();
         interval === 'monatlich' ? nextExecDate.setMonth(nextExecDate.getMonth() + 1) : nextExecDate.setDate(nextExecDate.getDate() + 7);
@@ -957,7 +882,7 @@
         recurringList.push(newRecurring);
         localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
 
-        // Erste Buchung sofort ausführen
+        // Erste Buchung sofort generieren
         const initialTx = {
           id: Date.now() + 1, title: titleStr + " (Dauerauftrag)", category: categoryStr, amount: amount,
           date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
@@ -965,7 +890,7 @@
         transactions.unshift(initialTx);
         currentBalance += amount;
       } else {
-        // STANDARD TRANSAKTION
+        // Standard Buchung
         const newTransaction = {
           id: Date.now(), title: titleStr, category: categoryStr, amount: amount,
           date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
@@ -978,6 +903,43 @@
       updateUI();
       updateRecurringUI();
       closeModal();
+    }
+
+    function checkRecurringOrders() {
+      let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
+      let updated = false;
+      const now = new Date();
+
+      recurringList.forEach(order => {
+        if (!order.nextDate) return;
+        let nextExecution = new Date(order.nextDate);
+
+        while (now >= nextExecution) {
+          const automatedTx = {
+            id: Date.now() + Math.random(),
+            title: order.title + " (Dauerauftrag)",
+            category: order.category,
+            amount: order.amount,
+            date: nextExecution.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
+          };
+
+          transactions.unshift(automatedTx);
+          currentBalance += order.amount;
+
+          if (order.interval === 'monatlich') {
+            nextExecution.setMonth(nextExecution.getMonth() + 1);
+          } else if (order.interval === 'wöchentlich') {
+            nextExecution.setDate(nextExecution.getDate() + 7);
+          }
+          order.nextDate = nextExecution.toISOString();
+          updated = true;
+        }
+      });
+
+      if (updated) {
+        saveToStorage();
+        localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
+      }
     }
 
     function deleteTransaction(id) {
@@ -1006,69 +968,41 @@
       return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(val);
     }
 
-    // --- INTERFACE RENDERING FUNCTIONS ---
-    function updateUI() {
-      document.getElementById('total-balance').innerText = formatCurrency(currentBalance);
-      const container = document.getElementById('transaction-container');
-      container.innerHTML = '';
+    // --- 3D INTERACTIVE GYRO CARD ENGINE ---
+    function setup3DEffect() {
+      const trigger = document.getElementById('card-trigger');
+      const card = document.getElementById('3d-card');
+      const glare = document.getElementById('card-glare');
 
-      if (transactions.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; margin-top: 24px; font-size: 15px;">Noch keine Kontobewegungen.</p>';
-        return;
-      }
+      const handleMove = (e) => {
+        if (document.getElementById('dashboard-view').style.display === 'none') return;
+        const rect = trigger.getBoundingClientRect();
+        let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        let clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-      transactions.forEach(t => {
-        const isIncome = t.amount > 0;
-        container.innerHTML += `
-          <div class="transaction-row-wrapper" id="wrapper-${t.id}" style="height: 72px;">
-            <div class="transaction-row" id="row-${t.id}" ontouchstart="rowTouchStart(event)" ontouchmove="rowTouchMove(event)" ontouchend="rowTouchEnd(event, ${t.id})">
-              <div class="row-red-overlay" id="bg-${t.id}">
-                <div></div>
-                <svg class="trash-right" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-              </div>
-              <div class="trans-info">
-                <span class="trans-title">${escapeHtml(t.title)}</span>
-                <span class="trans-meta">${t.category} • ${t.date}</span>
-              </div>
-              <div class="trans-amount ${isIncome ? 'income' : 'expense'}">${isIncome ? '＋ ' : '－ '}${formatCurrency(Math.abs(t.amount))}</div>
-            </div>
-          </div>
-        `;
-      });
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        const midX = rect.width / 2;
+        const midY = rect.height / 2;
+
+        const rotateX = ((midY - y) / midY) * 12;
+        const rotateY = ((x - midX) / midX) * 12;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        glare.style.background = `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(255,255,255,0.2) 0%, transparent 60%)`;
+      };
+
+      const handleReset = () => {
+        card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        glare.style.background = `linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%)`;
+      };
+
+      trigger.addEventListener('mousemove', handleMove);
+      trigger.addEventListener('mouseleave', handleReset);
+      trigger.addEventListener('touchmove', handleMove, { passive: true });
+      trigger.addEventListener('touchend', handleReset);
     }
 
-    function updateRecurringUI() {
-      const container = document.getElementById('recurring-tab-container');
-      let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
-      container.innerHTML = '';
-
-      if (recurringList.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; margin-top: 24px; font-size: 15px;">Keine aktiven Daueraufträge eingerichtet.</p>';
-        return;
-      }
-
-      recurringList.forEach(r => {
-        const isIncome = r.amount > 0;
-        const intervalLabel = r.interval === 'monatlich' ? 'Monatlich' : 'Wöchentlich';
-        container.innerHTML += `
-          <div class="transaction-row-wrapper" id="rec-wrapper-${r.id}" style="height: 72px;">
-            <div class="transaction-row" id="rec-row-${r.id}" ontouchstart="recTouchStart(event)" ontouchmove="recTouchMove(event)" ontouchend="recTouchEnd(event, ${r.id})">
-              <div class="row-red-overlay" id="rec-bg-${r.id}" style="background-color: transparent;">
-                <svg class="icon-edit" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                <svg class="icon-trash" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-              </div>
-              <div class="trans-info">
-                <span class="trans-title">${escapeHtml(r.title)}</span>
-                <span class="trans-meta">${r.category} • ${intervalLabel}</span>
-              </div>
-              <div class="trans-amount ${isIncome ? 'income' : 'expense'}">${isIncome ? '＋ ' : '－ '}${formatCurrency(Math.abs(r.amount))}</div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    // --- PROFILE AND CONFIGURATION SYSTEM ---
     function openSettings() {
       document.getElementById('settings-username-input').value = username;
       document.getElementById('settings-modal').classList.add('active');
@@ -1083,12 +1017,12 @@
       closeSettings();
     }
     function handleLogout() {
-      if(confirm('Möchtest du dich abmelden? Deine Buchungen bleiben auf dem Gerät verschlüsselt gespeichert.')) {
+      if(confirm('Abmelden? Deine Daten bleiben lokal gespeichert.')) {
         username = ""; localStorage.removeItem('vault_username'); closeSettings(); checkAuth();
       }
     }
     function resetAllData() {
-      if(confirm('WARNUNG: Möchtest du alle Daten permanent von diesem iPhone löschen?')) {
+      if(confirm('App-Daten unwiderruflich löschen?')) {
         localStorage.clear(); currentBalance = 0.00; transactions = []; username = ""; closeSettings(); checkAuth();
       }
     }
