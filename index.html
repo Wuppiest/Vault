@@ -7,6 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Vault">
   
+  <!-- Minimalistisches Gold-Tresor Icon -->
   <link class="apple-touch-icon" rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0C'/%3E%3Ccircle cx='90' cy='90' r='40' fill='none' stroke='%23D4AF37' stroke-width='8'/%3E%3Cpath d='M90 30 L90 50 M90 130 L90 150 M30 90 L50 90 M130 90 L150 90' stroke='%23D4AF37' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='10' fill='%23D4AF37'/%3E%3C/svg%3E">
 
   <title>Vault - Personal 3D Edition</title>
@@ -232,8 +233,8 @@
     .action-btn {
       background: var(--row-bg);
       border: 0.33px solid var(--apple-border);
-      border-radius: 20px; /* Abgerundet wie eine iOS App */
-      aspect-ratio: 1 / 1; /* Garantiert quadratisch */
+      border-radius: 20px;
+      aspect-ratio: 1 / 1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -341,7 +342,6 @@
     }
     .modal-sheet.active { transform: translateY(12%); }
 
-    /* Erlaubt Scrolling im Einstellungs-Modal, falls Liste lang wird */
     #settings-modal {
       overflow-y: scroll;
     }
@@ -438,6 +438,7 @@
 </head>
 <body>
 
+  <!-- FIRST TIME ONBOARDING -->
   <div id="onboarding-screen" class="onboarding-overlay hidden">
     <div class="onboarding-brand">
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width="90" height="90">
@@ -458,12 +459,15 @@
     <button class="action-btn" style="width: 100%; padding: 18px; aspect-ratio: auto; background: var(--text-main); color: var(--bg-main);" onclick="handleLogin()">Einrichten starten</button>
   </div>
 
+  <!-- MAIN APP HEADER -->
   <header>
     <h1>Vault</h1>
     <div class="profile-circle" id="profile-initials" onclick="openSettings()">--</div>
   </header>
 
+  <!-- MAIN DASHBOARD CONTENT -->
   <div class="main-content">
+    <!-- 3D CARD PERSPECTIVE CONTAINER -->
     <div class="card-perspective" id="card-trigger">
       <div class="n26-card" id="3d-card">
         <div class="card-glare" id="card-glare"></div>
@@ -488,35 +492,43 @@
       </div>
     </div>
 
+    <!-- QUICK ACTIONS (4 QUADRATISCHE BUTTONS) -->
     <div class="action-grid">
+      <!-- Button 1: Einnahme -->
       <button class="action-btn" onclick="openModal('income', false)">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         <span>Einnahme</span>
       </button>
       
+      <!-- Button 2: Dauerauftrag Einnahme -->
       <button class="action-btn" onclick="openModal('income', true)">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
         <span>Dauerauftrag<br>Einnahme</span>
       </button>
       
+      <!-- Button 3: Dauerauftrag Ausgabe -->
       <button class="action-btn" onclick="openModal('expense', true)">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
         <span>Dauerauftrag<br>Ausgabe</span>
       </button>
       
+      <!-- Button 4: Ausgabe -->
       <button class="action-btn" onclick="openModal('expense', false)">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         <span>Ausgabe</span>
       </button>
     </div>
 
+    <!-- TRANSACTIONS -->
     <div>
       <div class="section-title">Kontoaktivitäten</div>
       <div class="transaction-list" id="transaction-container">
-        </div>
+        <!-- Dynamischer Inhalt -->
+      </div>
     </div>
   </div>
 
+  <!-- TRANSACTION SLIDE SHEET MODAL -->
   <div id="transaction-modal" class="modal-sheet">
     <div class="modal-header">
       <span class="modal-btn" onclick="closeModal()">Abbrechen</span>
@@ -544,6 +556,7 @@
         </select>
       </div>
       
+      <!-- DYNAMISCHES INTERVALL FÜR DAUERAUFTRÄGE -->
       <div class="input-box" id="interval-box" style="display: none;">
         <label>Intervall (Wiederholung)</label>
         <select id="input-interval">
@@ -558,6 +571,7 @@
     </div>
   </div>
 
+  <!-- ACCOUNT SETTINGS SLIDE SHEET MODAL -->
   <div id="settings-modal" class="modal-sheet">
     <div class="modal-header">
       <span class="modal-btn" onclick="closeSettings()">Schließen</span>
@@ -570,10 +584,12 @@
         <input type="text" id="settings-username-input">
       </div>
       
+      <!-- DAUERAUFTRÄGE VERWALTUNGSLISTE -->
       <div style="margin-top: 12px;">
         <div class="section-title" style="padding-left: 0; margin-bottom: 8px;">Aktive Daueraufträge</div>
         <div id="recurring-list-container" style="display: flex; flex-direction: column; gap: 8px;">
-          </div>
+          <!-- Dynamische Liste -->
+        </div>
       </div>
       
       <button class="settings-danger-btn" onclick="handleLogout()" style="margin-top: 24px;">Abmelden (Konto wechseln)</button>
@@ -610,7 +626,6 @@
         document.getElementById('profile-initials').innerText = getInitials(username);
         document.getElementById('settings-username-input').value = username;
         
-        // Hintergrund-Check für fällige Daueraufträge beim App-Start
         checkRecurringOrders();
         updateUI();
       }
@@ -645,9 +660,7 @@
         if (!order.nextDate) return;
         let nextExecution = new Date(order.nextDate);
 
-        // Falls das Fälligkeitsdatum in der Vergangenheit oder genau jetzt liegt
         while (now >= nextExecution) {
-          // Erstelle eine automatisierte Transaktion
           const automatedTx = {
             id: Date.now() + Math.random(),
             title: order.title + " (Dauerauftrag)",
@@ -659,7 +672,6 @@
           transactions.unshift(automatedTx);
           currentBalance += order.amount;
 
-          // Intervall auf das nächste Datum hochrechnen
           if (order.interval === 'monatlich') {
             nextExecution.setMonth(nextExecution.getMonth() + 1);
           } else if (order.interval === 'wöchentlich') {
@@ -888,7 +900,6 @@
       currentType = type;
       isRecurringMode = recurring;
       
-      // UI-Anpassung basierend darauf, ob ein Dauerauftrag gewählt wurde
       if (recurring) {
         document.getElementById('modal-view-title').innerText = type === 'income' ? 'Dauerauftrag Einnahme' : 'Dauerauftrag Ausgabe';
         document.getElementById('interval-box').style.display = 'flex';
@@ -924,10 +935,8 @@
       if (currentType === 'expense') amount = -amount;
 
       if (isRecurringMode) {
-        // --- LOGIK FÜR DAUERAUFTRAG SPEICHERUNG ---
         const interval = document.getElementById('input-interval').value;
         
-        // Nächste Ausführung berechnen
         let nextExecDate = new Date();
         if (interval === 'monatlich') {
           nextExecDate.setMonth(nextExecDate.getMonth() + 1);
@@ -944,7 +953,6 @@
           nextDate: nextExecDate.toISOString()
         };
 
-        // Direkt als erste Buchung jetzt sofort ausführen
         const initialTx = {
           id: Date.now() + 1,
           title: titleStr + " (Dauerauftrag)",
@@ -956,13 +964,11 @@
         transactions.unshift(initialTx);
         currentBalance += amount;
 
-        // In die Dauerauftragsliste sichern
         let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
         recurringList.push(newRecurring);
         localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
 
       } else {
-        // --- STANDARD BUCHUNG ---
         const newTransaction = {
           id: Date.now(),
           title: titleStr,
@@ -982,7 +988,6 @@
     function deleteTransaction(id) {
       const targetIndex = transactions.findIndex(t => t.id === id);
       if (targetIndex !== -1) {
-        // Passe Kontostand an, wenn Transaktion gelöscht wird
         currentBalance -= transactions[targetIndex].amount;
         transactions.splice(targetIndex, 1);
         saveToStorage();
