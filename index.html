@@ -210,26 +210,24 @@
     }
     .action-btn:active { transform: scale(0.90); }
 
-    /* Alle Icons sind strikt weiß gefärbt */
-    .action-btn svg {
-      color: #FFFFFF;
-    }
-
-    /* Weiße Tasten -> Weißes Icon bekommt Schatten für perfekte Sichtbarkeit */
+    /* Weiße Tasten -> Absolut schwarzes Icon */
     .action-btn.btn-white {
       background: #FFFFFF;
     }
     .action-btn.btn-white svg {
-      filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.4)) drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.25));
+      color: #000000;
     }
 
-    /* Schwarze Tasten -> Weißes Icon */
+    /* Schwarze Tasten -> Absolut weißes Icon */
     .action-btn.btn-black {
       background: #000000;
       border: 0.33px solid var(--apple-border);
     }
+    .action-btn.btn-black svg {
+      color: #FFFFFF;
+    }
 
-    /* LISTS & RELIABLE SWIPING (NO COLORS) */
+    /* LISTS & RELIABLE SWIPING */
     .section-title {
       font-size: 14px;
       text-transform: uppercase;
@@ -291,7 +289,6 @@
     .trans-title { font-size: 16px; font-weight: 600; }
     .trans-meta { font-size: 12px; color: var(--text-secondary); }
     
-    /* Beträge komplett Schwarz-Weiß */
     .trans-amount { font-size: 16px; font-weight: 700; }
     .trans-amount.income { color: #FFFFFF; }
     .trans-amount.expense { color: var(--text-secondary); }
@@ -457,42 +454,42 @@
 
       <div class="action-grid">
         <button class="action-btn btn-white" onclick="openModal('income', false)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 7V5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v2" opacity="0.4" />
-            <rect x="3" y="7" width="18" height="13" rx="2" />
-            <path d="M16 11h3a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-3V11z" fill="currentColor" fill-opacity="0.2" />
-            <circle cx="18" cy="13.5" r="1" fill="currentColor" />
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8V6a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v2" opacity="0.4" />
+            <rect x="2" y="8" width="13" height="11" rx="1.5" />
+            <path d="M11 11h2a1.5 1.5 0 0 1 1.5 1.5v0a1.5 1.5 0 0 1-1.5 1.5h-2V11z" fill="currentColor" fill-opacity="0.15" />
+            <line x1="20" y1="18" x2="20" y2="5" stroke-width="2.6" />
+            <polyline points="17 8 20 5 23 8" stroke-width="2.6" />
           </svg>
         </button>
         
         <button class="action-btn btn-white" onclick="openModal('income', true)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="5" width="20" height="14" rx="2" />
-            <rect x="5" y="9" width="4" height="3" rx="0.5" stroke-width="1.5" />
-            <path d="M5 10.5h4M7 9v3" stroke-width="1" />
-            <line x1="5" y1="15" x2="11" y2="15" stroke-width="1.5" opacity="0.7" />
-            <circle cx="16" cy="14.5" r="1.5" stroke-width="1.5" />
-            <circle cx="18.5" cy="14.5" r="1.5" stroke-width="1.5" />
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="13" height="12" rx="1.5" />
+            <rect x="4" y="9" width="3" height="2" rx="0.3" stroke-width="1.5" />
+            <line x1="2" y1="14" x2="15" y2="14" stroke-width="1.2" opacity="0.5" />
+            <line x1="20" y1="18" x2="20" y2="5" stroke-width="2.6" />
+            <polyline points="17 8 20 5 23 8" stroke-width="2.6" />
           </svg>
         </button>
         
         <button class="action-btn btn-black" onclick="openModal('expense', true)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="5" width="20" height="14" rx="2" />
-            <rect x="5" y="9" width="4" height="3" rx="0.5" stroke-width="1.5" />
-            <path d="M5 10.5h4M7 9v3" stroke-width="1" />
-            <line x1="5" y1="15" x2="11" y2="15" stroke-width="1.5" opacity="0.7" />
-            <circle cx="16" cy="14.5" r="1.5" stroke-width="1.5" />
-            <circle cx="18.5" cy="14.5" r="1.5" stroke-width="1.5" />
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="13" height="12" rx="1.5" />
+            <rect x="4" y="9" width="3" height="2" rx="0.3" stroke-width="1.5" />
+            <line x1="2" y1="14" x2="15" y2="14" stroke-width="1.2" opacity="0.5" />
+            <line x1="20" y1="5" x2="20" y2="18" stroke-width="2.6" />
+            <polyline points="17 15 20 18 23 15" stroke-width="2.6" />
           </svg>
         </button>
         
         <button class="action-btn btn-black" onclick="openModal('expense', false)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 7V5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v2" opacity="0.4" />
-            <rect x="3" y="7" width="18" height="13" rx="2" />
-            <path d="M16 11h3a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-3V11z" fill="currentColor" fill-opacity="0.2" />
-            <circle cx="18" cy="13.5" r="1" fill="currentColor" />
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8V6a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v2" opacity="0.4" />
+            <rect x="2" y="8" width="13" height="11" rx="1.5" />
+            <path d="M11 11h2a1.5 1.5 0 0 1 1.5 1.5v0a1.5 1.5 0 0 1-1.5 1.5h-2V11z" fill="currentColor" fill-opacity="0.15" />
+            <line x1="20" y1="5" x2="20" y2="18" stroke-width="2.6" />
+            <polyline points="17 15 20 18 23 15" stroke-width="2.6" />
           </svg>
         </button>
       </div>
@@ -648,7 +645,7 @@
       }
     }
 
-    // --- MONOCHROME POINTER SWIPE ENGINE (NO COLORS) ---
+    // --- MONOCHROME POINTER SWIPE ENGINE ---
     function pointerDownHandler(e, id, isRecurring) {
       activeRow = e.currentTarget;
       startX = e.clientX;
