@@ -9,19 +9,18 @@
   
   <link class="apple-touch-icon" rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0C'/%3E%3Ccircle cx='90' cy='90' r='40' fill='none' stroke='%23D4AF37' stroke-width='8'/%3E%3Cpath d='M90 30 L90 50 M90 130 L90 150 M30 90 L50 90 M130 90 L150 90' stroke='%23D4AF37' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='10' fill='%23D4AF37'/%3E%3C/svg%3E">
 
-  <title>Vault - Personal Tab Edition</title>
+  <title>Vault - Monochrome Edition</title>
   <style>
     :root {
       --bg-main: #0A0A0C;
-      --accent-green: #34C759;
-      --accent-red: #FF3B30;
-      --accent-blue: #0A84FF;
       --text-main: #FFFFFF;
       --text-secondary: rgba(255, 255, 255, 0.45);
       --row-bg: #1C1C1E;
       --input-bg: #2C2C2E;
       --apple-border: rgba(255, 255, 255, 0.06);
       --blur-bg: rgba(15, 15, 17, 0.7);
+      --mono-dark: #2C2C2E;
+      --mono-light: #444446;
     }
 
     * {
@@ -97,7 +96,7 @@
     .n26-card {
       width: 100%;
       height: 100%;
-      background: #3A3A3C;
+      background: #1C1C1E;
       border-radius: 16px;
       position: relative;
       display: flex;
@@ -112,7 +111,7 @@
     .card-glare {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
       pointer-events: none;
       z-index: 5;
     }
@@ -135,7 +134,8 @@
     .card-chip {
       width: 42px;
       height: 32px;
-      background: linear-gradient(135deg, #f0d090 0%, #c5a059 50%, #a37e36 100%);
+      background: linear-gradient(135deg, #444446 0%, #2C2C2E 50%, #1C1C1E 100%);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 6px;
       margin-top: 16px;
     }
@@ -161,10 +161,10 @@
 
     .card-bottom-bar {
       height: 56px;
-      background: rgba(230, 230, 235, 0.25);
+      background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -174,8 +174,9 @@
     .card-holder-name {
       font-size: 14px;
       font-weight: 500;
-      color: #1C1C1E;
+      color: #FFFFFF;
       text-transform: uppercase;
+      opacity: 0.8;
     }
 
     .mastercard-logo {
@@ -185,9 +186,9 @@
       width: 36px;
       height: 22px;
     }
-    .mc-circle { width: 22px; height: 22px; border-radius: 50%; position: absolute; }
-    .mc-red { background: #EB001B; left: 0; }
-    .mc-yellow { background: #FF5F00; right: 0; opacity: 0.9; }
+    .mc-circle { width: 22px; height: 22px; border-radius: 50%; position: absolute; border: 1px solid rgba(255,255,255,0.2); }
+    .mc-red { background: #333333; left: 0; }
+    .mc-yellow { background: #555555; right: 0; opacity: 0.9; }
 
     /* MONOCHROME ACTION GRID */
     .action-grid {
@@ -203,30 +204,33 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
       transition: transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1);
       border: none;
     }
     .action-btn:active { transform: scale(0.90); }
 
-    /* Weiße Tasten -> Schwarze Icons */
+    /* Alle Icons sind strikt weiß */
+    .action-btn svg {
+      color: #FFFFFF;
+      fill: none;
+    }
+
+    /* Weiße Tasten -> Weißes Icon bekommt Schatten für perfekte Sichtbarkeit */
     .action-btn.btn-white {
       background: #FFFFFF;
     }
     .action-btn.btn-white svg {
-      color: #000000;
+      filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.45)) drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.3));
     }
 
-    /* Schwarze Tasten -> Weiße Icons */
+    /* Schwarze Tasten -> Weißes Icon */
     .action-btn.btn-black {
       background: #000000;
       border: 0.33px solid var(--apple-border);
     }
-    .action-btn.btn-black svg {
-      color: #FFFFFF;
-    }
 
-    /* LISTS & RELIABLE SWIPING */
+    /* LISTS & RELIABLE SWIPING (NO COLORS) */
     .section-title {
       font-size: 14px;
       text-transform: uppercase;
@@ -287,9 +291,11 @@
     .trans-info { display: flex; flex-direction: column; gap: 2px; }
     .trans-title { font-size: 16px; font-weight: 600; }
     .trans-meta { font-size: 12px; color: var(--text-secondary); }
+    
+    /* Beträge komplett Schwarz-Weiß */
     .trans-amount { font-size: 16px; font-weight: 700; }
-    .trans-amount.income { color: var(--accent-green); }
-    .trans-amount.expense { color: var(--text-main); }
+    .trans-amount.income { color: #FFFFFF; }
+    .trans-amount.expense { color: var(--text-secondary); }
 
     /* NATIVE BOTTOM TAB BAR */
     .tab-bar {
@@ -376,9 +382,9 @@
     }
 
     .settings-danger-btn {
-      background: rgba(255, 59, 48, 0.15);
-      border: 0.33px solid rgba(255, 59, 48, 0.3);
-      color: var(--accent-red);
+      background: rgba(255, 255, 255, 0.08);
+      border: 0.33px solid var(--apple-border);
+      color: #FFFFFF;
       border-radius: 18px;
       padding: 16px;
       font-size: 15px;
@@ -410,7 +416,7 @@
     <div class="onboarding-brand">
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width="90" height="90">
         <rect width='180' height='180' rx='40' fill='#1C1C1E' />
-        <circle cx='90' cy='90' r='35' fill='none' stroke='#D4AF37' stroke-width='7' />
+        <circle cx='90' cy='90' r='35' fill='none' stroke='#FFFFFF' stroke-width='7' />
       </svg>
       <h2 class="onboarding-title">Willkommen bei Vault</h2>
     </div>
@@ -452,34 +458,36 @@
 
       <div class="action-grid">
         <button class="action-btn btn-white" onclick="openModal('income', false)">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 12V8H4v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Z"/>
-            <path d="M22 12h-4a1.5 1.5 0 0 0 0 3h4"/>
-            <path d="M4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/>
+          <svg width="28" height="28" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/>
+            <path d="M4 10h16"/>
+            <path d="M13 10h5a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5V10z" fill="white"/>
           </svg>
         </button>
         
         <button class="action-btn btn-white" onclick="openModal('income', true)">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <svg width="28" height="28" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2" ry="2"/>
             <line x1="2" y1="10" x2="22" y2="10"/>
-            <path d="M6 14h2v2H6z"/>
+            <rect x="5" y="14" width="3" height="2" fill="white" stroke-width="0"/>
+            <line x1="12" y1="15" x2="17" y2="15"/>
           </svg>
         </button>
         
         <button class="action-btn btn-black" onclick="openModal('expense', true)">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <svg width="28" height="28" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2" ry="2"/>
             <line x1="2" y1="10" x2="22" y2="10"/>
-            <path d="M6 14h2v2H6z"/>
+            <rect x="5" y="14" width="3" height="2" fill="white" stroke-width="0"/>
+            <line x1="12" y1="15" x2="17" y2="15"/>
           </svg>
         </button>
         
         <button class="action-btn btn-black" onclick="openModal('expense', false)">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 12V8H4v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Z"/>
-            <path d="M22 12h-4a1.5 1.5 0 0 0 0 3h4"/>
-            <path d="M4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/>
+          <svg width="28" height="28" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/>
+            <path d="M4 10h16"/>
+            <path d="M13 10h5a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5V10z" fill="white"/>
           </svg>
         </button>
       </div>
@@ -517,7 +525,7 @@
     <div class="modal-header">
       <span class="modal-btn" onclick="closeModal()">Abbrechen</span>
       <span class="modal-title" id="modal-view-title">Eintrag hinzufügen</span>
-      <span class="modal-btn" style="font-weight: 600; color: var(--accent-green);" onclick="saveTransaction()">Fertig</span>
+      <span class="modal-btn" style="font-weight: 600;" onclick="saveTransaction()">Fertig</span>
     </div>
     <div class="modal-content">
       <div class="input-box">
@@ -553,7 +561,7 @@
     <div class="modal-header">
       <span class="modal-btn" onclick="closeSettings()">Schließen</span>
       <span class="modal-title">Einstellungen</span>
-      <span class="modal-btn" style="font-weight: 600; color: var(--accent-green);" onclick="saveProfileChanges()">Sichern</span>
+      <span class="modal-btn" style="font-weight: 600;" onclick="saveProfileChanges()">Sichern</span>
     </div>
     <div class="modal-content">
       <div class="input-box">
@@ -561,7 +569,7 @@
         <input type="text" id="settings-username-input">
       </div>
       <button class="settings-danger-btn" onclick="handleLogout()" style="margin-top: 24px;">Abmelden</button>
-      <button class="settings-danger-btn" style="background: rgba(255,38,38,0.05); border-color: transparent;" onclick="resetAllData()">Alles löschen</button>
+      <button class="settings-danger-btn" style="background: rgba(255,255,255,0.02);" onclick="resetAllData()">Alles löschen</button>
     </div>
   </div>
 
@@ -635,7 +643,7 @@
       }
     }
 
-    // --- REVOLUTIONARY UNIFIED POINTER SWIPE ENGINE ---
+    // --- MONOCHROME POINTER SWIPE ENGINE (NO COLORS) ---
     function pointerDownHandler(e, id, isRecurring) {
       activeRow = e.currentTarget;
       startX = e.clientX;
@@ -665,16 +673,16 @@
           const iconTrash = bg.querySelector('.icon-trash');
           
           if (diffX > 0) {
-            bg.style.backgroundColor = 'var(--accent-blue)';
+            bg.style.backgroundColor = 'var(--mono-light)';
             if (iconEdit) { iconEdit.style.opacity = opacity; iconEdit.style.transform = `scale(${Math.min(0.6 + (diffX/240), 1.1)})`; }
             if (iconTrash) iconTrash.style.opacity = '0';
           } else {
-            bg.style.backgroundColor = 'var(--accent-red)';
+            bg.style.backgroundColor = 'var(--mono-dark)';
             if (iconTrash) { iconTrash.style.opacity = opacity; iconTrash.style.transform = `scale(${Math.min(0.6 + (Math.abs(diffX)/240), 1.1)})`; }
             if (iconEdit) iconEdit.style.opacity = '0';
           }
         } else {
-          bg.style.backgroundColor = 'var(--accent-red)';
+          bg.style.backgroundColor = 'var(--mono-dark)';
           const trashRight = bg.querySelector('.trash-right');
           if (trashRight) { trashRight.style.opacity = opacity; trashRight.style.transform = `scale(${Math.min(0.6 + (Math.abs(diffX)/240), 1.1)})`; }
         }
@@ -976,12 +984,12 @@
         const rotateY = ((x - midX) / midX) * 12;
 
         card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        glare.style.background = `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(255,255,255,0.2) 0%, transparent 60%)`;
+        glare.style.background = `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(255,255,255,0.12) 0%, transparent 60%)`;
       };
 
       const handleReset = () => {
         card.style.transform = 'rotateX(0deg) rotateY(0deg)';
-        glare.style.background = `linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%)`;
+        glare.style.background = `linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%)`;
       };
 
       trigger.addEventListener('mousemove', handleMove);
