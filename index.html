@@ -513,37 +513,38 @@
     .faceid-radar-box.success .radar-line { border-color: var(--ios-green); animation-play-state: paused; }
     .faceid-radar-box.success .faceid-icon-svg { color: var(--ios-green); transform: scale(1.1); }
 
-    /* CLEAN IPHONE PASSCODE NUMPAD GRID */
+    /* CLEAN NATIVE IPHONE PASSCODE NUMPAD GRID */
     .numpad-container { 
       display: grid; 
       grid-template-columns: repeat(3, 1fr); 
-      gap: 16px 28px; 
-      max-width: 290px; 
-      margin: 28px auto 0; 
+      gap: 20px 30px; 
+      max-width: 320px; 
+      margin: 32px auto 0; 
     }
     .numpad-btn {
-      width: 74px;
-      height: 74px; 
-      background: rgba(255, 255, 255, 0.05); 
-      border: none;
+      width: 82px;
+      height: 82px; 
+      background: rgba(255, 255, 255, 0.08); 
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 50%; 
       display: flex; 
       align-items: center; 
       justify-content: center;
-      font-size: 28px; 
-      font-weight: 400; 
+      font-size: 32px; 
+      font-weight: 300; 
       color: #FFF; 
       cursor: pointer; 
-      transition: background 0.12s cubic-bezier(0.1, 0.8, 0.2, 1), transform 0.1s ease;
+      transition: background 0.1s cubic-bezier(0.1, 0.8, 0.2, 1), transform 0.1s ease;
       margin: 0 auto;
     }
     .numpad-btn:active { 
-      background: rgba(255, 255, 255, 0.22); 
-      transform: scale(0.93);
+      background: rgba(255, 255, 255, 0.25); 
+      transform: scale(0.92);
     }
     .numpad-btn.action-node {
       background: transparent;
-      font-size: 16px;
+      border: none;
+      font-size: 15px;
       font-weight: 500;
       color: var(--text-secondary);
     }
@@ -745,7 +746,7 @@
     </div>
 
     <div class="wizard-action-bar">
-      <button class="wizard-btn btn-back" id="wizard-back-btn" style="display: none;" onclick="prevWizardStep()">Zurück</button>
+      <button class="wizard-btn btn-back" id="wizard-back-btn" style="display: none;" onclick="prevWizardStep()">← Zurück</button>
       <button class="wizard-btn" id="wizard-action-btn" onclick="nextWizardStep()">Fortfahren</button>
     </div>
   </div>
@@ -888,8 +889,8 @@
     let username = localStorage.getItem('vault_username') || "";
     
     // Core Crypt Security Variables
-    let securityMethod = localStorage.getItem('vault_security_method') || "both"; // both, faceid, passcode, none
-    let securityTrigger = localStorage.getItem('vault_security_trigger') || "always"; // always, mutations
+    let securityMethod = localStorage.getItem('vault_security_method') || "both"; 
+    let securityTrigger = localStorage.getItem('vault_security_trigger') || "always"; 
     let savedPasscode = localStorage.getItem('vault_passcode') || "";
 
     let currentType = 'income';
@@ -921,19 +922,15 @@
         currentWizardStep = 1;
         tempSetupSecurity = 'both';
         tempSetupTrigger = 'always';
-        updateWizardProgressIndicators(1);
-        document.getElementById('wizard-back-btn').style.display = 'none';
-        document.getElementById('wizard-action-btn').style.display = 'block';
+        syncWizardButtons();
         document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active', 'leaving'));
         document.getElementById('wizard-step-1').classList.add('active');
         document.getElementById('onboarding-screen').classList.remove('hidden');
-        document.getElementById('wizard-action-btn').innerText = "Fortfahren";
       } else {
         document.getElementById('onboarding-screen').classList.add('hidden');
         document.getElementById('card-holder-display').innerText = username;
         document.getElementById('profile-initials').innerText = getInitials(username);
         
-        // Sync setting form factors
         document.getElementById('settings-username-input').value = username;
         document.getElementById('settings-security-method').value = securityMethod;
         document.getElementById('settings-security-trigger').value = securityTrigger;
@@ -1026,7 +1023,7 @@
       }
     }
 
-    // ONBOARDING WIZARD NAVIGATION (FORWARD ENGINE)
+    // ONBOARDING WIZARD NAVIGATION & CENTRAL STATE ENGINE
     function selectSetupSecurity(method, element) {
       tempSetupSecurity = method;
       element.parentNode.querySelectorAll('.selection-item').forEach(item => item.classList.remove('selected'));
@@ -1039,11 +1036,30 @@
       element.classList.add('selected');
     }
 
-    function updateWizardProgressIndicators(step) {
+    function syncWizardButtons() {
+      const backBtn = document.getElementById('wizard-back-btn');
+      const actionBtn = document.getElementById('wizard-action-btn');
+      
+      // Update progress lights
       document.querySelectorAll('.progress-bar').forEach((el, idx) => {
-        if(idx < step) el.classList.add('active');
+        if(idx < currentWizardStep) el.classList.add('active');
         else el.classList.remove('active');
       });
+
+      // Back navigation button rendering triggers
+      if (currentWizardStep > 1 && currentWizardStep < 10 && currentWizardStep !== 6) {
+        backBtn.style.display = 'block';
+      } else {
+        backBtn.style.display = 'none';
+      }
+
+      // Action button rendering triggers (hide on automated/keypad views)
+      if (currentWizardStep === 6 || currentWizardStep === 7 || currentWizardStep === 10) {
+        actionBtn.style.display = 'none';
+      } else {
+        actionBtn.style.display = 'block';
+        actionBtn.innerText = "Fortfahren";
+      }
     }
 
     function nextWizardStep() {
@@ -1080,17 +1096,8 @@
 
         setTimeout(() => {
           currentEl.classList.remove('leaving');
-          updateWizardProgressIndicators(currentWizardStep);
           nextEl.classList.add('active');
           
-          // Toggle UI state components
-          const backBtn = document.getElementById('wizard-back-btn');
-          if (currentWizardStep > 1 && currentWizardStep < 10) {
-            backBtn.style.display = 'block';
-          } else {
-            backBtn.style.display = 'none';
-          }
-
           if (currentWizardStep === 6) {
             runFaceIDSetupSimulation();
           } else if (currentWizardStep === 7) {
@@ -1098,17 +1105,17 @@
           } else if (currentWizardStep === 10) {
             runAutomatedEncryptionEngine();
           }
+
+          syncWizardButtons();
         }, 220);
       }
     }
 
-    // ONBOARDING WIZARD NAVIGATION (REVERSE BACKWARD ENGINE)
     function prevWizardStep() {
       if (currentWizardStep <= 1 || currentWizardStep === 10) return;
 
       let prevStep = currentWizardStep - 1;
 
-      // Reverse routing mappings contextually matching variables
       if (currentWizardStep === 8) {
         if (tempSetupSecurity === 'none') {
           prevStep = 5;
@@ -1128,36 +1135,26 @@
 
       currentWizardStep = prevStep;
       const prevEl = document.getElementById(`wizard-step-${currentWizardStep}`);
-
-      updateWizardProgressIndicators(currentWizardStep);
       prevEl.classList.add('active');
 
-      const backBtn = document.getElementById('wizard-back-btn');
-      const actionBtn = document.getElementById('wizard-action-btn');
-
-      if (currentWizardStep === 1) {
-        backBtn.style.display = 'none';
-      } else {
-        backBtn.style.display = 'block';
-      }
-
-      // Restore action button standard triggers if jumping away from automatic loaders
-      if (currentWizardStep !== 6 && currentWizardStep !== 10) {
-        actionBtn.style.display = 'block';
-      } else if (currentWizardStep === 6) {
+      if (currentWizardStep === 6) {
         runFaceIDSetupSimulation();
+      } else if (currentWizardStep === 7) {
+        resetSetupPinWorkflow();
       }
+
+      syncWizardButtons();
     }
 
     // INTERACTIVE SUB-SCREENS FOR ONBOARDING
     function runFaceIDSetupSimulation() {
-      const btn = document.getElementById('wizard-action-btn');
-      btn.style.display = 'none';
+      syncWizardButtons(); // Enforce button updates
       const status = document.getElementById('faceid-setup-status');
       const box = document.getElementById('setup-radar-box');
       box.classList.remove('success');
       
       status.innerText = "Erfasse Gesichtszüge...";
+      status.style.color = "var(--accent-gold)";
       
       setTimeout(() => { status.innerText = "Berechne biometrischen Hash... 45%"; }, 800);
       setTimeout(() => { status.innerText = "Verschlüssele Geometriedaten... 90%"; }, 1600);
@@ -1167,7 +1164,6 @@
         status.innerText = "Face ID erfolgreich eingerichtet";
         status.style.color = "var(--ios-green)";
         setTimeout(() => {
-          btn.style.display = 'block';
           nextWizardStep();
         }, 600);
       }, 2400);
@@ -1176,17 +1172,16 @@
     function resetSetupPinWorkflow() {
       tempPinBuffer = "";
       tempPinFirstTime = "";
-      document.getElementById('wizard-action-btn').style.display = 'none';
       document.getElementById('pin-setup-title').innerText = "Code erstellen";
       document.getElementById('pin-setup-desc').innerText = "Lege einen 4-stelligen App-Sperrcode fest.";
       updatePinDots('setup-pin-dots', 0);
+      syncWizardButtons();
     }
 
     function buildKeypads() {
       const setupPad = document.getElementById('setup-numpad');
       const lockPad = document.getElementById('lock-numpad');
       
-      // Clean structure arrays matching native iOS layouts
       const layoutModel = [
         { key: '1', style: 'num' }, { key: '2', style: 'num' }, { key: '3', style: 'num' },
         { key: '4', style: 'num' }, { key: '5', style: 'num' }, { key: '6', style: 'num' },
@@ -1308,8 +1303,7 @@
     }
 
     function runAutomatedEncryptionEngine() {
-      document.getElementById('wizard-action-btn').style.display = "none";
-      document.getElementById('wizard-back-btn').style.display = "none";
+      syncWizardButtons();
       const bar = document.getElementById('onboarding-loading-bar');
       const statusText = document.getElementById('engine-status');
       
@@ -1417,11 +1411,10 @@
       document.getElementById('onboarding-screen').classList.remove('hidden');
       document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
       document.getElementById('wizard-step-7').classList.add('active');
-      document.getElementById('wizard-action-btn').style.display = 'none';
-      document.getElementById('wizard-back-btn').style.display = 'block';
       
       currentWizardStep = 7;
       tempSetupSecurity = 'passcode';
+      syncWizardButtons();
     }
 
     function handleLogout() {
