@@ -451,9 +451,9 @@
       filter: blur(30px);
       transform: scale(0.92);
       pointer-events: none;
-      transition: opacity 0.5s cubic-bezier(0.2, 1, 0.2, 1),
-                  filter 0.5s cubic-bezier(0.2, 1, 0.2, 1),
-                  transform 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+      transition: opacity 0.4s cubic-bezier(0.2, 1, 0.2, 1),
+                  filter 0.4s cubic-bezier(0.2, 1, 0.2, 1),
+                  transform 0.4s cubic-bezier(0.2, 1, 0.2, 1);
     }
     .wizard-step.active { opacity: 1; filter: blur(0px); transform: scale(1); pointer-events: auto; }
     .wizard-step.leaving { opacity: 0; filter: blur(35px); transform: scale(1.06); pointer-events: none; }
@@ -469,12 +469,29 @@
       -webkit-text-fill-color: transparent;
     }
     .wizard-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
+    
+    /* WIZARD ACTION BAR LAYOUT */
+    .wizard-action-bar {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
     .wizard-btn {
+      flex: 2;
       background: var(--accent-gold); color: #000000; font-weight: 700; border-radius: 18px;
-      padding: 18px; width: 100%; border: none; font-size: 16px; cursor: pointer;
-      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2); transition: transform 0.1s ease;
+      padding: 18px; border: none; font-size: 16px; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2); transition: transform 0.1s ease, background-color 0.2s;
     }
     .wizard-btn:active { transform: scale(0.97); }
+    
+    .wizard-btn.btn-back {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+      box-shadow: none;
+    }
+    .wizard-btn.btn-back:active { background: rgba(255, 255, 255, 0.12); }
 
     /* RADIO OPTION ROWS */
     .selection-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
@@ -496,17 +513,56 @@
     .faceid-radar-box.success .radar-line { border-color: var(--ios-green); animation-play-state: paused; }
     .faceid-radar-box.success .faceid-icon-svg { color: var(--ios-green); transform: scale(1.1); }
 
-    /* NUMPAD ENGINE GRID */
-    .numpad-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 280px; margin: 24px auto 0; }
-    .numpad-btn {
-      aspect-ratio: 1/1; background: var(--row-bg); border: 1px solid var(--apple-border);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 24px; font-weight: 600; color: #FFF; cursor: pointer; transition: background 0.1s;
+    /* CLEAN IPHONE PASSCODE NUMPAD GRID */
+    .numpad-container { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 16px 28px; 
+      max-width: 290px; 
+      margin: 28px auto 0; 
     }
-    .numpad-btn:active { background: var(--mono-light); }
-    .pin-dots-display { display: flex; justify-content: center; gap: 16px; margin: 16px 0; }
-    .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--text-secondary); transition: background 0.1s; }
-    .pin-dot.filled { background: var(--accent-gold); border-color: var(--accent-gold); }
+    .numpad-btn {
+      width: 74px;
+      height: 74px; 
+      background: rgba(255, 255, 255, 0.05); 
+      border: none;
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      font-size: 28px; 
+      font-weight: 400; 
+      color: #FFF; 
+      cursor: pointer; 
+      transition: background 0.12s cubic-bezier(0.1, 0.8, 0.2, 1), transform 0.1s ease;
+      margin: 0 auto;
+    }
+    .numpad-btn:active { 
+      background: rgba(255, 255, 255, 0.22); 
+      transform: scale(0.93);
+    }
+    .numpad-btn.action-node {
+      background: transparent;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .numpad-btn.action-node:active {
+      background: transparent;
+      color: #FFF;
+      transform: none;
+    }
+    
+    .pin-dots-display { display: flex; justify-content: center; gap: 20px; margin: 24px 0; }
+    .pin-dot { 
+      width: 13px; 
+      height: 13px; 
+      border-radius: 50%; 
+      border: 1.5px solid var(--accent-gold); 
+      background: transparent;
+      transition: background 0.15s cubic-bezier(0.15, 0.85, 0.35, 1); 
+    }
+    .pin-dot.filled { background: var(--accent-gold); }
 
     /* SECURITY APPARATUS OVERLAY (LOCK SCREEN) */
     .lockscreen-overlay {
@@ -688,7 +744,8 @@
 
     </div>
 
-    <div>
+    <div class="wizard-action-bar">
+      <button class="wizard-btn btn-back" id="wizard-back-btn" style="display: none;" onclick="prevWizardStep()">Zurück</button>
       <button class="wizard-btn" id="wizard-action-btn" onclick="nextWizardStep()">Fortfahren</button>
     </div>
   </div>
@@ -865,10 +922,11 @@
         tempSetupSecurity = 'both';
         tempSetupTrigger = 'always';
         updateWizardProgressIndicators(1);
+        document.getElementById('wizard-back-btn').style.display = 'none';
+        document.getElementById('wizard-action-btn').style.display = 'block';
         document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active', 'leaving'));
         document.getElementById('wizard-step-1').classList.add('active');
         document.getElementById('onboarding-screen').classList.remove('hidden');
-        document.getElementById('wizard-action-btn').style.display = "block";
         document.getElementById('wizard-action-btn').innerText = "Fortfahren";
       } else {
         document.getElementById('onboarding-screen').classList.add('hidden');
@@ -923,7 +981,7 @@
 
     function switchToLockPin() {
       if (!savedPasscode) {
-        unlockAppComplete(); // Fallback if no pin actually set
+        unlockAppComplete();
         return;
       }
       document.getElementById('lock-faceid-zone').style.display = 'none';
@@ -938,7 +996,6 @@
 
     function handleProtectedAction(actionCallback) {
       if (securityTrigger === 'mutations' && securityMethod !== 'none') {
-        // Require authorization before mutation action
         const overlay = document.getElementById('app-lockscreen');
         overlay.classList.remove('hidden');
         document.getElementById('lock-screen-title').innerText = "Aktion autorisieren";
@@ -948,7 +1005,6 @@
 
         const dynamicUnlock = () => {
           document.getElementById('app-lockscreen').classList.add('hidden');
-          // Reset view tags
           document.getElementById('lock-screen-title').innerText = "Vault gesperrt";
           document.getElementById('lock-screen-desc').innerText = "Authentifizierung erforderlich";
           actionCallback();
@@ -970,7 +1026,7 @@
       }
     }
 
-    // ONBOARDING WIZARD NAVIGATION (DYNAMIC ROUTING)
+    // ONBOARDING WIZARD NAVIGATION (FORWARD ENGINE)
     function selectSetupSecurity(method, element) {
       tempSetupSecurity = method;
       element.parentNode.querySelectorAll('.selection-item').forEach(item => item.classList.remove('selected'));
@@ -1000,18 +1056,17 @@
         currentBalance = parseFloat(initialBal) || 0.00;
       }
 
-      // Dynamic Bypass Rules for Biometrics/PIN Paths
       let nextStep = currentWizardStep + 1;
       
       if (currentWizardStep === 5) {
         if (tempSetupSecurity === 'none') {
-          nextStep = 8; // Skip Face ID and Passcode entirely
+          nextStep = 8;
         } else if (tempSetupSecurity === 'passcode') {
-          nextStep = 7; // Skip Face ID, go to PIN
+          nextStep = 7;
         }
       } else if (currentWizardStep === 6) {
         if (tempSetupSecurity === 'faceid') {
-          nextStep = 8; // Skip PIN setup, go to triggers
+          nextStep = 8;
         }
       }
 
@@ -1028,7 +1083,14 @@
           updateWizardProgressIndicators(currentWizardStep);
           nextEl.classList.add('active');
           
-          // Trigger special sub-renders inside the steps
+          // Toggle UI state components
+          const backBtn = document.getElementById('wizard-back-btn');
+          if (currentWizardStep > 1 && currentWizardStep < 10) {
+            backBtn.style.display = 'block';
+          } else {
+            backBtn.style.display = 'none';
+          }
+
           if (currentWizardStep === 6) {
             runFaceIDSetupSimulation();
           } else if (currentWizardStep === 7) {
@@ -1037,6 +1099,53 @@
             runAutomatedEncryptionEngine();
           }
         }, 220);
+      }
+    }
+
+    // ONBOARDING WIZARD NAVIGATION (REVERSE BACKWARD ENGINE)
+    function prevWizardStep() {
+      if (currentWizardStep <= 1 || currentWizardStep === 10) return;
+
+      let prevStep = currentWizardStep - 1;
+
+      // Reverse routing mappings contextually matching variables
+      if (currentWizardStep === 8) {
+        if (tempSetupSecurity === 'none') {
+          prevStep = 5;
+        } else if (tempSetupSecurity === 'faceid') {
+          prevStep = 6;
+        } else if (tempSetupSecurity === 'passcode') {
+          prevStep = 7;
+        }
+      } else if (currentWizardStep === 7) {
+        if (tempSetupSecurity === 'passcode') {
+          prevStep = 5;
+        }
+      }
+
+      const currentEl = document.getElementById(`wizard-step-${currentWizardStep}`);
+      currentEl.classList.remove('active');
+
+      currentWizardStep = prevStep;
+      const prevEl = document.getElementById(`wizard-step-${currentWizardStep}`);
+
+      updateWizardProgressIndicators(currentWizardStep);
+      prevEl.classList.add('active');
+
+      const backBtn = document.getElementById('wizard-back-btn');
+      const actionBtn = document.getElementById('wizard-action-btn');
+
+      if (currentWizardStep === 1) {
+        backBtn.style.display = 'none';
+      } else {
+        backBtn.style.display = 'block';
+      }
+
+      // Restore action button standard triggers if jumping away from automatic loaders
+      if (currentWizardStep !== 6 && currentWizardStep !== 10) {
+        actionBtn.style.display = 'block';
+      } else if (currentWizardStep === 6) {
+        runFaceIDSetupSimulation();
       }
     }
 
@@ -1069,7 +1178,7 @@
       tempPinFirstTime = "";
       document.getElementById('wizard-action-btn').style.display = 'none';
       document.getElementById('pin-setup-title').innerText = "Code erstellen";
-      document.getElementById('pin-setup-desc').innerText = "Gib einen 4-stelligen PIN ein.";
+      document.getElementById('pin-setup-desc').innerText = "Lege einen 4-stelligen App-Sperrcode fest.";
       updatePinDots('setup-pin-dots', 0);
     }
 
@@ -1077,20 +1186,29 @@
       const setupPad = document.getElementById('setup-numpad');
       const lockPad = document.getElementById('lock-numpad');
       
-      const digitLayout = [1,2,3,4,5,6,7,8,9,'✕',0,'⌫'];
+      // Clean structure arrays matching native iOS layouts
+      const layoutModel = [
+        { key: '1', style: 'num' }, { key: '2', style: 'num' }, { key: '3', style: 'num' },
+        { key: '4', style: 'num' }, { key: '5', style: 'num' }, { key: '6', style: 'num' },
+        { key: '7', style: 'num' }, { key: '8', style: 'num' }, { key: '9', style: 'num' },
+        { key: '✕', style: 'action' }, { key: '0', style: 'num' }, { key: '⌫', style: 'action' }
+      ];
       
-      digitLayout.forEach(dig => {
-        const bSetup = document.createElement('div');
-        bSetup.className = "numpad-btn";
-        bSetup.innerText = dig;
-        bSetup.onclick = () => handleSetupPinInput(dig);
-        setupPad.appendChild(bSetup);
+      setupPad.innerHTML = '';
+      lockPad.innerHTML = '';
 
-        const bLock = document.createElement('div');
-        bLock.className = "numpad-btn";
-        bLock.innerText = dig;
-        bLock.onclick = () => handleLockPinInput(dig);
-        lockPad.appendChild(bLock);
+      layoutModel.forEach(node => {
+        const nodeSetup = document.createElement('div');
+        nodeSetup.className = node.style === 'num' ? "numpad-btn" : "numpad-btn action-node";
+        nodeSetup.innerText = node.key;
+        nodeSetup.onclick = () => handleSetupPinInput(node.key);
+        setupPad.appendChild(nodeSetup);
+
+        const nodeLock = document.createElement('div');
+        nodeLock.className = node.style === 'num' ? "numpad-btn" : "numpad-btn action-node";
+        nodeLock.innerText = node.key;
+        nodeLock.onclick = () => handleLockPinInput(node.key);
+        lockPad.appendChild(nodeLock);
       });
     }
 
@@ -1115,14 +1233,12 @@
       if(tempPinBuffer.length === 4) {
         setTimeout(() => {
           if (!tempPinFirstTime) {
-            // First code pass complete
             tempPinFirstTime = tempPinBuffer;
             tempPinBuffer = "";
             document.getElementById('pin-setup-title').innerText = "Code bestätigen";
             document.getElementById('pin-setup-desc').innerText = "Gib den PIN erneut ein, um ihn zu verifizieren.";
             updatePinDots('setup-pin-dots', 0);
           } else {
-            // Second code pass verification
             if (tempPinBuffer === tempPinFirstTime) {
               savedPasscode = tempPinBuffer;
               localStorage.setItem('vault_passcode', savedPasscode);
@@ -1193,6 +1309,7 @@
 
     function runAutomatedEncryptionEngine() {
       document.getElementById('wizard-action-btn').style.display = "none";
+      document.getElementById('wizard-back-btn').style.display = "none";
       const bar = document.getElementById('onboarding-loading-bar');
       const statusText = document.getElementById('engine-status');
       
@@ -1230,7 +1347,7 @@
               }];
               localStorage.setItem('vault_transactions', JSON.stringify(transactions));
             }
-            appUnlocked = true; // Avoid double triggering immediately on setup exit
+            appUnlocked = true;
             checkAuth();
           }, 500);
         }
@@ -1251,7 +1368,6 @@
       
       const titleText = document.getElementById('app-title-text');
 
-      // Hide all views, remove active tab indicators
       Object.values(views).forEach(v => v.style.display = 'none');
       Object.values(tabs).forEach(t => t.classList.remove('active'));
 
@@ -1296,17 +1412,16 @@
     }
 
     function resetPinFlow() {
-      // Toggle onboarding layer targeting solely the pin interface dynamic loop
       tempPinBuffer = "";
       tempPinFirstTime = "";
       document.getElementById('onboarding-screen').classList.remove('hidden');
       document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
       document.getElementById('wizard-step-7').classList.add('active');
       document.getElementById('wizard-action-btn').style.display = 'none';
+      document.getElementById('wizard-back-btn').style.display = 'block';
       
-      // Override onboarding dynamic route to exit back to dashboard on finish
       currentWizardStep = 7;
-      tempSetupSecurity = 'passcode'; // Triggers routing to step 8
+      tempSetupSecurity = 'passcode';
     }
 
     function handleLogout() {
