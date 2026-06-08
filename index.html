@@ -9,7 +9,7 @@
   
   <link class="apple-touch-icon" rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0C'/%3E%3Ccircle cx='90' cy='90' r='40' fill='none' stroke='%23D4AF37' stroke-width='8'/%3E%3Cpath d='M90 30 L90 50 M90 130 L90 150 M30 90 L50 90 M130 90 L150 90' stroke='%23D4AF37' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='10' fill='%23D4AF37'/%3E%3C/svg%3E">
 
-  <title>Vault - Premium Edition</title>
+  <title>Vault - Cyber Security Edition</title>
   <style>
     :root {
       --bg-main: #070708;
@@ -20,9 +20,11 @@
       --row-bg: #141416;
       --input-bg: #1C1C1E;
       --apple-border: rgba(255, 255, 255, 0.06);
-      --blur-bg: rgba(10, 10, 12, 0.92);
+      --blur-bg: rgba(10, 10, 12, 0.94);
       --mono-dark: #2C2C2E;
       --mono-light: #444446;
+      --ios-red: #FF453A;
+      --ios-green: #30D158;
     }
 
     * {
@@ -371,20 +373,38 @@
       font-size: 17px; font-weight: 500; outline: none; width: 100%;
     }
 
+    /* IOS SETTINGS LISTS */
+    .settings-group {
+      background: var(--row-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--apple-border);
+      margin-bottom: 20px;
+    }
+    .settings-row {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--apple-border);
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row-label { font-size: 16px; font-weight: 500; }
+    .settings-row-value { font-size: 15px; color: var(--text-secondary); text-align: right; }
+    
     .settings-danger-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #FFFFFF;
-      border-radius: 18px;
+      background: rgba(255, 69, 58, 0.1);
+      border: 1px solid rgba(255, 69, 58, 0.2);
+      color: var(--ios-red);
+      border-radius: 16px;
       padding: 16px;
       font-size: 15px;
       font-weight: 600;
       width: 100%;
       cursor: pointer;
-      margin-top: 12px;
     }
 
-    /* HIGH-END MULTI-STEP ONBOARDING WITH BULLETPROOF CINEMATIC BLUR TRANSITIONS */
+    /* WIZARD & BIOMETRIC SCREENS */
     .onboarding-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -421,7 +441,6 @@
       width: 100%;
     }
 
-    /* CINEMATIC LAYER STATE MACHINE (BLUR + SCALE SLIDE) */
     .wizard-step {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -432,29 +451,14 @@
       filter: blur(30px);
       transform: scale(0.92);
       pointer-events: none;
-      transition: opacity 0.6s cubic-bezier(0.2, 1, 0.2, 1),
-                  filter 0.6s cubic-bezier(0.2, 1, 0.2, 1),
-                  transform 0.6s cubic-bezier(0.2, 1, 0.2, 1);
+      transition: opacity 0.5s cubic-bezier(0.2, 1, 0.2, 1),
+                  filter 0.5s cubic-bezier(0.2, 1, 0.2, 1),
+                  transform 0.5s cubic-bezier(0.2, 1, 0.2, 1);
     }
-    
-    .wizard-step.active {
-      opacity: 1;
-      filter: blur(0px);
-      transform: scale(1);
-      pointer-events: auto;
-    }
+    .wizard-step.active { opacity: 1; filter: blur(0px); transform: scale(1); pointer-events: auto; }
+    .wizard-step.leaving { opacity: 0; filter: blur(35px); transform: scale(1.06); pointer-events: none; }
 
-    .wizard-step.leaving {
-      opacity: 0;
-      filter: blur(35px);
-      transform: scale(1.06);
-      pointer-events: none;
-    }
-
-    .wizard-icon {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+    .wizard-icon { text-align: center; margin-bottom: 24px; }
     .wizard-title {
       font-size: 26px;
       font-weight: 800;
@@ -464,56 +468,83 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .wizard-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-
+    .wizard-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
     .wizard-btn {
-      background: var(--accent-gold);
-      color: #000000;
-      font-weight: 700;
-      border-radius: 18px;
-      padding: 18px;
-      width: 100%;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
-      transition: transform 0.1s ease;
+      background: var(--accent-gold); color: #000000; font-weight: 700; border-radius: 18px;
+      padding: 18px; width: 100%; border: none; font-size: 16px; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2); transition: transform 0.1s ease;
     }
     .wizard-btn:active { transform: scale(0.97); }
 
-    /* ENGINE LOADER ANIMATION */
-    .engine-loader-container {
-      width: 100%;
-      background: rgba(255,255,255,0.05);
-      height: 6px;
-      border-radius: 3px;
-      overflow: hidden;
-      margin-top: 20px;
-      position: relative;
+    /* RADIO OPTION ROWS */
+    .selection-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .selection-item {
+      background: var(--row-bg); border: 1px solid var(--apple-border);
+      border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between;
+      align-items: center; cursor: pointer; transition: border-color 0.2s;
     }
-    .engine-loader-bar {
-      width: 0%;
-      height: 100%;
-      background: var(--accent-gold);
-      box-shadow: 0 0 12px var(--accent-gold);
-      transition: width 0.1s linear;
+    .selection-item.selected { border-color: var(--accent-gold); background: rgba(212,175,55,0.03); }
+    .radio-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-secondary); display: flex; align-items: center; justify-content: center; }
+    .selection-item.selected .radio-circle { border-color: var(--accent-gold); }
+    .selection-item.selected .radio-circle::after { content: ''; width: 10px; height: 10px; background: var(--accent-gold); border-radius: 50%; }
+
+    /* FACE ID RADAR SYSTEM */
+    .faceid-radar-box { position: relative; width: 140px; height: 140px; margin: 0 auto 32px; display: flex; align-items: center; justify-content: center; }
+    .radar-line { position: absolute; width: 100%; height: 100%; border: 2px dashed rgba(212, 175, 55, 0.3); border-radius: 50%; animation: spinRadar 4s linear infinite; }
+    @keyframes spinRadar { 100% { transform: rotate(360deg); } }
+    .faceid-icon-svg { width: 64px; height: 64px; color: var(--accent-gold); transition: transform 0.3s ease; }
+    .faceid-radar-box.success .radar-line { border-color: var(--ios-green); animation-play-state: paused; }
+    .faceid-radar-box.success .faceid-icon-svg { color: var(--ios-green); transform: scale(1.1); }
+
+    /* NUMPAD ENGINE GRID */
+    .numpad-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 280px; margin: 24px auto 0; }
+    .numpad-btn {
+      aspect-ratio: 1/1; background: var(--row-bg); border: 1px solid var(--apple-border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 600; color: #FFF; cursor: pointer; transition: background 0.1s;
     }
-    #engine-status {
-      font-family: monospace;
-      font-size: 11px;
-      color: var(--accent-gold);
-      margin-top: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .numpad-btn:active { background: var(--mono-light); }
+    .pin-dots-display { display: flex; justify-content: center; gap: 16px; margin: 16px 0; }
+    .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--text-secondary); transition: background 0.1s; }
+    .pin-dot.filled { background: var(--accent-gold); border-color: var(--accent-gold); }
+
+    /* SECURITY APPARATUS OVERLAY (LOCK SCREEN) */
+    .lockscreen-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #050506; z-index: 5000;
+      display: flex; flex-direction: column; justify-content: space-between; padding: 120px 40px 60px;
+      opacity: 1; transition: opacity 0.4s ease;
     }
+    .lockscreen-overlay.hidden { display: none !important; }
+
+    .engine-loader-container { width: 100%; background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-top: 20px; }
+    .engine-loader-bar { width: 0%; height: 100%; background: var(--accent-gold); box-shadow: 0 0 12px var(--accent-gold); transition: width 0.1s linear; }
+    #engine-status { font-family: monospace; font-size: 11px; color: var(--accent-gold); margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
   </style>
 </head>
 <body>
+
+  <div id="app-lockscreen" class="lockscreen-overlay hidden">
+    <div style="text-align: center;">
+      <h2 class="wizard-title" id="lock-screen-title">Vault gesperrt</h2>
+      <p class="wizard-desc" id="lock-screen-desc">Authentifizierung erforderlich</p>
+      
+      <div id="lock-faceid-zone" style="display: none; margin-top: 40px;">
+        <div class="faceid-radar-box" id="lock-radar-box" onclick="triggerLockscreenFaceID()">
+          <div class="radar-line"></div>
+          <svg class="faceid-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3s-2 2-2 5v8s0 5 2 5h14s2-2 2-5V8s0-5-2-5H5z M12 7v6 M9 10h6 M8 17s1.5-2 4-2 4 2 4 2"/></svg>
+        </div>
+        <p style="font-size: 13px; color: var(--accent-gold); cursor: pointer;" onclick="switchToLockPin()">Stattdessen Code eingeben</p>
+      </div>
+
+      <div id="lock-pin-zone" style="display: none; margin-top: 20px;">
+        <div class="pin-dots-display" id="lock-pin-dots">
+          <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+        </div>
+        <div class="numpad-container" id="lock-numpad"></div>
+      </div>
+    </div>
+    <div></div>
+  </div>
 
   <div id="onboarding-screen" class="onboarding-overlay hidden">
     <div class="wizard-progress">
@@ -526,29 +557,28 @@
       <div class="progress-bar" id="p-step-7"></div>
       <div class="progress-bar" id="p-step-8"></div>
       <div class="progress-bar" id="p-step-9"></div>
+      <div class="progress-bar" id="p-step-10"></div>
     </div>
 
     <div class="wizard-step-container">
       
       <div class="wizard-step active" id="wizard-step-1">
         <div class="wizard-icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
-        <h2 class="wizard-title">Willkommen im Vault</h2>
-        <p class="wizard-desc">Dein dezentraler Finanztresor der nächsten Generation. Sämtliche Kontodaten verbleiben isoliert auf diesem Gerät.</p>
+        <h2 class="wizard-title">System-Verschlüsselung</h2>
+        <p class="wizard-desc">Willkommen im Vault. Sämtliche Kontobewegungen und Sicherheitsmechanismen verbleiben isoliert in deiner lokalen Sandbox.</p>
         <div class="input-box">
-          <label>Nutzungsbedingung</label>
+          <label>Zertifikat-Vereinbarung</label>
           <select id="wizard-terms">
-            <option value="accept">Ich akzeptiere die Offline-Verschlüsselung</option>
+            <option value="accept">Lokale Verschlüsselung akzeptieren</option>
           </select>
         </div>
       </div>
 
       <div class="wizard-step" id="wizard-step-2">
         <h2 class="wizard-title">Konto-Identität</h2>
-        <p class="wizard-desc">Gib den Namen ein, der auf deiner personalisierten digitalen Bankkarte eingraviert werden soll.</p>
+        <p class="wizard-desc">Wie lautet der Name des primären Systemadministrators?</p>
         <div class="input-box">
           <label>Karteninhaber (Name)</label>
           <input type="text" id="wizard-username" placeholder="z.B. Max Mustermann">
@@ -556,23 +586,10 @@
       </div>
 
       <div class="wizard-step" id="wizard-step-3">
-        <h2 class="wizard-title">Karten-System wählen</h2>
-        <p class="wizard-desc">Wähle dein bevorzugtes UI-Modell für deine Wallet aus.</p>
+        <h2 class="wizard-title">System-Währung</h2>
+        <p class="wizard-desc">Lege fest, in welcher Währungseinheit alle Berechnungen durchgeführt werden.</p>
         <div class="input-box">
-          <label>Karten-Modell</label>
-          <select id="wizard-card-tier">
-            <option value="gold">N26 Gold Edition Premium</option>
-            <option value="metal">N26 Cyber Metal Dark</option>
-            <option value="carbon">N26 Carbon Shadow</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="wizard-step" id="wizard-step-4">
-        <h2 class="wizard-title">Währung & Region</h2>
-        <p class="wizard-desc">Lege fest, in welcher Hauptwährung deine Berechnungen und Übersichten kalkuliert werden sollen.</p>
-        <div class="input-box">
-          <label>Standard-Währung</label>
+          <label>Hauptwährung</label>
           <select id="wizard-currency">
             <option value="EUR">Euro (€)</option>
             <option value="USD">US-Dollar ($)</option>
@@ -581,63 +598,92 @@
         </div>
       </div>
 
-      <div class="wizard-step" id="wizard-step-5">
+      <div class="wizard-step" id="wizard-step-4">
         <h2 class="wizard-title">Startguthaben verbuchen</h2>
-        <p class="wizard-desc">Wie viel Guthaben befindet sich aktuell real auf deinem Konto? Dieser Betrag bildet das mathematische Fundament.</p>
+        <p class="wizard-desc">Definiere das mathematische Fundament deines Kontostands.</p>
         <div class="input-box">
           <label>Aktueller Kontostand</label>
           <input type="number" id="wizard-balance" placeholder="0.00" inputmode="decimal" step="0.01">
         </div>
       </div>
 
-      <div class="wizard-step" id="wizard-step-6">
-        <h2 class="wizard-title">Budget-Architektur</h2>
-        <p class="wizard-desc">Setze ein optionales monatliches Ausgabenlimit für Abos, Gaming oder Verpflegung fest.</p>
-        <div class="input-box">
-          <label>Monatliches Budget-Limit (Optional)</label>
-          <input type="number" id="wizard-budget" placeholder="Kein Limit" inputmode="decimal">
+      <div class="wizard-step" id="wizard-step-5">
+        <h2 class="wizard-title">Sicherheitsarchitektur</h2>
+        <p class="wizard-desc">Wähle aus, wie der Zugriff auf deine Finanzmatrix blockiert werden soll. Du kannst Face ID, einen PIN-Code oder beides konfigurieren.</p>
+        <div class="selection-list">
+          <div class="selection-item selected" onclick="selectSetupSecurity('both', this)">
+            <div><strong>Face ID & Passcode</strong><div style="font-size:12px;color:var(--text-secondary)">Maximale Absicherung</div></div>
+            <div class="radio-circle"></div>
+          </div>
+          <div class="selection-item" onclick="selectSetupSecurity('faceid', this)">
+            <div><strong>Nur Face ID</strong><div style="font-size:12px;color:var(--text-secondary)">Biometrischer Schnellzugriff</div></div>
+            <div class="radio-circle"></div>
+          </div>
+          <div class="selection-item" onclick="selectSetupSecurity('passcode', this)">
+            <div><strong>Nur Passcode (PIN)</strong><div style="font-size:12px;color:var(--text-secondary)">Klassischer 4-Stelliger Code</div></div>
+            <div class="radio-circle"></div>
+          </div>
+          <div class="selection-item" onclick="selectSetupSecurity('none', this)">
+            <div><strong>Ungeschützt</strong><div style="font-size:12px;color:var(--text-secondary)">Keine Barriere (Nicht empfohlen)</div></div>
+            <div class="radio-circle"></div>
+          </div>
         </div>
+      </div>
+
+      <div class="wizard-step" id="wizard-step-6">
+        <h2 class="wizard-title" style="text-align: center;">Face ID einrichten</h2>
+        <p class="wizard-desc" style="text-align: center;">Blicke in die Kamera deines Geräts, um deine biometrische ID mathematisch zu hashen.</p>
+        <div class="faceid-radar-box" id="setup-radar-box">
+          <div class="radar-line"></div>
+          <svg class="faceid-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3s-2 2-2 5v8s0 5 2 5h14s2-2 2-5V8s0-5-2-5H5z M12 7v6 M9 10h6 M8 17s1.5-2 4-2 4 2 4 2"/></svg>
+        </div>
+        <p id="faceid-setup-status" style="text-align:center; font-size:14px; color:var(--accent-gold); font-weight:600; min-height:20px;"></p>
       </div>
 
       <div class="wizard-step" id="wizard-step-7">
-        <h2 class="wizard-title">Sicherheits-Ebene</h2>
-        <p class="wizard-desc">Wähle aus, wie der Zugriff auf deine sensiblen Finanzdaten blockiert oder geschützt werden soll.</p>
-        <div class="input-box">
-          <label>Sperrmechanismus</label>
-          <select id="wizard-security-tier">
-            <option>Simuliertes FaceID + App-PIN</option>
-            <option>Nur lokaler App-Sperrcode</option>
-            <option>Keine Sperre (Sofort öffnen)</option>
-          </select>
+        <h2 class="wizard-title" style="text-align: center;" id="pin-setup-title">Code erstellen</h2>
+        <p class="wizard-desc" style="text-align: center;" id="pin-setup-desc">Lege einen 4-stelligen App-Sperrcode fest.</p>
+        <div class="pin-dots-display" id="setup-pin-dots">
+          <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
         </div>
+        <div class="numpad-container" id="setup-numpad"></div>
       </div>
 
       <div class="wizard-step" id="wizard-step-8">
-        <h2 class="wizard-title">Mitteilungen & Widgets</h2>
-        <p class="wizard-desc">Sollen automatische Abbuchungen deiner Daueraufträge direkt als Push-Mitteilung simuliert werden?</p>
-        <div class="input-box">
-          <label>Hintergrund-Simulation</label>
-          <select id="wizard-push-simulation">
-            <option>Ja, Echtzeit-Simulation aktivieren</option>
-            <option>Nein, nur lautlose Updates</option>
-          </select>
+        <h2 class="wizard-title">Sperr-Bedingung</h2>
+        <p class="wizard-desc">Wann genau soll die biometrische oder numerische Barriere abgefragt werden?</p>
+        <div class="selection-list">
+          <div class="selection-item selected" onclick="selectSetupTrigger('always', this)">
+            <div><strong>Bei jedem App-Start</strong><div style="font-size:12px;color:var(--text-secondary)">Sofortiger Schutz beim Verlassen</div></div>
+            <div class="radio-circle"></div>
+          </div>
+          <div class="selection-item" onclick="selectSetupTrigger('mutations', this)">
+            <div><strong>Nur bei Buchungen / Änderungen</strong><div style="font-size:12px;color:var(--text-secondary)">Schützt Kapitaltransfers & Löschungen</div></div>
+            <div class="radio-circle"></div>
+          </div>
         </div>
       </div>
 
       <div class="wizard-step" id="wizard-step-9">
+        <h2 class="wizard-title">System-Mitteilungen</h2>
+        <p class="wizard-desc">Sollen automatische Abbuchungen deiner Daueraufträge direkt als Push-Mitteilung simuliert werden?</p>
+        <div class="input-box">
+          <label>Hintergrund-Simulation</label>
+          <select id="wizard-push-simulation">
+            <option value="yes">Ja, Echtzeit-Mitteilungen emulieren</option>
+            <option value="no">Nein, lautlose Updates im Hintergrund</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="wizard-step" id="wizard-step-10">
         <div class="wizard-icon">
-          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
+          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </div>
-        <h2 class="wizard-title">Initialisiere Tresor...</h2>
-        <p class="wizard-desc">Generiere dezentrale Dateistrukturen und injiziere Verschlüsselungs-Schlüssel in deine lokale Sandbox.</p>
-        
-        <div class="engine-loader-container">
-          <div class="engine-loader-bar" id="onboarding-loading-bar"></div>
-        </div>
-        <div id="engine-status">Warte auf Freigabe...</div>
+        <h2 class="wizard-title">Initialisiere Sicherheits-Kern...</h2>
+        <p class="wizard-desc">Injektiere Verschlüsselungs-Schlüssel in deine lokale Sandbox und mappt biometrische Berechtigungen.</p>
+        <div class="engine-loader-container"><div class="engine-loader-bar" id="onboarding-loading-bar"></div></div>
+        <div id="engine-status">Generiere Vault...</div>
       </div>
 
     </div>
@@ -649,7 +695,7 @@
 
   <header>
     <h1 id="app-title-text">Vault</h1>
-    <div class="profile-circle" id="profile-initials" onclick="openSettings()">--</div>
+    <div class="profile-circle" id="profile-initials" onclick="switchTab('settings')">--</div>
   </header>
 
   <div class="main-content">
@@ -668,49 +714,23 @@
           </div>
           <div class="card-bottom-bar">
             <div class="card-holder-name" id="card-holder-display">Gast</div>
-            <div class="mastercard-logo">
-              <div class="mc-circle mc-red"></div>
-              <div class="mc-circle mc-yellow"></div>
-            </div>
+            <div class="mastercard-logo"><div class="mc-circle mc-red"></div><div class="mc-circle mc-yellow"></div></div>
           </div>
         </div>
       </div>
 
       <div class="action-grid">
-        <button class="action-btn" onclick="openModal('income', false)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="8" width="15" height="11" rx="1.5"></rect>
-            <line x1="2" y1="12" x2="17" y2="12"></line>
-            <path d="M18 5h4v4 M22 5l-5 5" stroke="#D4AF37" stroke-width="2.5"></path>
-          </svg>
+        <button class="action-btn" onclick="handleProtectedAction(() => openModal('income', false))">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="8" width="15" height="11" rx="1.5"></rect><line x1="2" y1="12" x2="17" y2="12"></line><path d="M18 5h4v4 M22 5l-5 5" stroke="#D4AF37" stroke-width="2.5"></path></svg>
         </button>
-        
-        <button class="action-btn" onclick="openModal('income', true)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="8" width="14" height="12" rx="1.5"></rect>
-            <line x1="2" y1="13" x2="16" y2="13"></line>
-            <line x1="5" y1="6" x2="5" y2="8"></line>
-            <line x1="11" y1="6" x2="11" y2="8"></line>
-            <path d="M18 5h4v4 M22 5l-5 5" stroke="#D4AF37" stroke-width="2.5"></path>
-          </svg>
+        <button class="action-btn" onclick="handleProtectedAction(() => openModal('income', true))">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="8" width="14" height="12" rx="1.5"></rect><line x1="2" y1="13" x2="16" y2="13"></line><line x1="5" y1="6" x2="5" y2="8"></line><line x1="11" y1="6" x2="11" y2="8"></line><path d="M18 5h4v4 M22 5l-5 5" stroke="#D4AF37" stroke-width="2.5"></path></svg>
         </button>
-        
-        <button class="action-btn" onclick="openModal('expense', true)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="4" width="14" height="12" rx="1.5"></rect>
-            <line x1="2" y1="9" x2="16" y2="9"></line>
-            <line x1="5" y1="2" x2="5" y2="4"></line>
-            <line x1="11" y1="2" x2="11" y2="4"></line>
-            <path d="M18 19h4v-4 M22 19l-5-5" stroke="#D4AF37" stroke-width="2.5"></path>
-          </svg>
+        <button class="action-btn" onclick="handleProtectedAction(() => openModal('expense', true))">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="14" height="12" rx="1.5"></rect><line x1="2" y1="9" x2="16" y2="9"></line><line x1="5" y1="2" x2="5" y2="4"></line><line x1="11" y1="2" x2="11" y2="4"></line><path d="M18 19h4v-4 M22 19l-5-5" stroke="#D4AF37" stroke-width="2.5"></path></svg>
         </button>
-        
-        <button class="action-btn" onclick="openModal('expense', false)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="4" width="15" height="11" rx="1.5"></rect>
-            <line x1="2" y1="8" x2="17" y2="8"></line>
-            <path d="M18 19h4v-4 M22 19l-5-5" stroke="#D4AF37" stroke-width="2.5"></path>
-          </svg>
+        <button class="action-btn" onclick="handleProtectedAction(() => openModal('expense', false))">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="15" height="11" rx="1.5"></rect><line x1="2" y1="8" x2="17" y2="8"></line><path d="M18 19h4v-4 M22 19l-5-5" stroke="#D4AF37" stroke-width="2.5"></path></svg>
         </button>
       </div>
 
@@ -727,6 +747,48 @@
           ← Rechts wischen zum Bearbeiten | Links wischen zum Beenden →
         </div>
         <div class="transaction-list" id="recurring-tab-container"></div>
+      </div>
+    </div>
+
+    <div id="settings-view" class="tab-view" style="display: none;">
+      <div>
+        <div class="section-title">Inhaber-Identität</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <span class="settings-row-label">Administrator</span>
+            <input type="text" id="settings-username-input" onchange="updateProfileName(this.value)" style="background:none; border:none; color:#FFF; text-align:right; font-size:16px; outline:none; width:60%;">
+          </div>
+        </div>
+
+        <div class="section-title">Sicherheit & Autorisierung</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <span class="settings-row-label">Sicherheitsmodell</span>
+            <select id="settings-security-method" onchange="changeSecurityMethod(this.value)" style="background:none; border:none; color:var(--accent-gold); font-size:16px; outline:none; text-align:right;">
+              <option value="both">Face ID & Code</option>
+              <option value="faceid">Nur Face ID</option>
+              <option value="passcode">Nur Code</option>
+              <option value="none">Ungeschützt</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-label">Abfrage-Intervall</span>
+            <select id="settings-security-trigger" onchange="changeSecurityTrigger(this.value)" style="background:none; border:none; color:var(--accent-gold); font-size:16px; outline:none; text-align:right;">
+              <option value="always">Bei jedem App-Start</option>
+              <option value="mutations">Nur bei Buchungen</option>
+            </select>
+          </div>
+          <div class="settings-row" id="settings-pin-row" style="cursor:pointer;" onclick="resetPinFlow()">
+            <span class="settings-row-label" style="color:var(--accent-gold);">Sperrcode (PIN) neu festlegen</span>
+            <span class="settings-row-value">➔</span>
+          </div>
+        </div>
+
+        <div class="section-title">Systemwartung</div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <button class="settings-danger-btn" style="background:rgba(255,255,255,0.03); border-color:var(--apple-border); color:#FFF;" onclick="handleLogout()">Aus Vault abmelden</button>
+          <button class="settings-danger-btn" onclick="resetAllData()">Gesamte Datenbank zurücksetzen</button>
+        </div>
       </div>
     </div>
 
@@ -750,48 +812,16 @@
       <span class="modal-btn" style="font-weight: 600; color: var(--accent-gold);" onclick="saveTransaction()">Fertig</span>
     </div>
     <div class="modal-content">
-      <div class="input-box">
-        <label>Betrag (€)</label>
-        <input type="number" id="input-amount" step="0.01" placeholder="0.00" inputmode="decimal">
-      </div>
-      <div class="input-box">
-        <label>Titel / Verwendungszweck</label>
-        <input type="text" id="input-title" placeholder="z.B. Gaming, Snacks...">
-      </div>
+      <div class="input-box"><label>Betrag (€)</label><input type="number" id="input-amount" step="0.01" placeholder="0.00" inputmode="decimal"></div>
+      <div class="input-box"><label>Titel / Verwendungszweck</label><input type="text" id="input-title" placeholder="z.B. Gaming, Snacks..."></div>
       <div class="input-box">
         <label>Kategorie</label>
-        <select id="input-category">
-          <option>Taschengeld</option>
-          <option>Gaming & Abo</option>
-          <option>Snacks & Essen</option>
-          <option>Geschenk</option>
-          <option>Kleidung</option>
-          <option>Sonstiges</option>
-        </select>
+        <select id="input-category"><option>Taschengeld</option><option>Gaming & Abo</option><option>Snacks & Essen</option><option>Geschenk</option><option>Kleidung</option><option>Sonstiges</option></select>
       </div>
       <div class="input-box" id="interval-box" style="display: none;">
         <label>Intervall</label>
-        <select id="input-interval">
-          <option value="monatlich">Monatlich</option>
-          <option value="wöchentlich">Wöchentlich</option>
-        </select>
+        <select id="input-interval"><option value="monatlich">Monatlich</option><option value="wöchentlich">Wöchentlich</option></select>
       </div>
-    </div>
-  </div>
-
-  <div id="settings-modal" class="modal-sheet">
-    <div class="modal-header">
-      <span class="modal-btn" onclick="closeSettings()">Schließen</span>
-      <span class="modal-title">Einstellungen</span>
-      <span class="modal-btn" style="font-weight: 600; color: var(--accent-gold);" onclick="saveProfileChanges()">Sichern</span>
-    </div>
-    <div class="modal-content">
-      <div class="input-box">
-        <label>Name ändern</label>
-        <input type="text" id="settings-username-input">
-      </div>
-      <button class="settings-danger-btn" onclick="handleLogout()" style="margin-top: 24px; color: #FF453A;">Abmelden</button>
-      <button class="settings-danger-btn" style="background: rgba(255,255,255,0.02);" onclick="resetAllData()">Alles zurücksetzen</button>
     </div>
   </div>
 
@@ -799,17 +829,32 @@
     let currentBalance = parseFloat(localStorage.getItem('vault_balance')) || 0.00;
     let transactions = JSON.parse(localStorage.getItem('vault_transactions')) || [];
     let username = localStorage.getItem('vault_username') || "";
+    
+    // Core Crypt Security Variables
+    let securityMethod = localStorage.getItem('vault_security_method') || "both"; // both, faceid, passcode, none
+    let securityTrigger = localStorage.getItem('vault_security_trigger') || "always"; // always, mutations
+    let savedPasscode = localStorage.getItem('vault_passcode') || "";
+
     let currentType = 'income';
     let isRecurringMode = false;
     let editingRecurringId = null;
+    
     let currentWizardStep = 1;
-    const totalWizardSteps = 9;
+    const totalWizardSteps = 10;
+    
+    // Temp States for Wizard Workflows
+    let tempSetupSecurity = 'both';
+    let tempSetupTrigger = 'always';
+    let tempPinBuffer = "";
+    let tempPinFirstTime = "";
 
     let activeRow = null;
     let startX = 0;
     let isDragging = false;
+    let appUnlocked = false;
 
     window.onload = function() {
+      buildKeypads();
       checkAuth();
       setup3DEffect();
     };
@@ -817,10 +862,10 @@
     function checkAuth() {
       if (!username) {
         currentWizardStep = 1;
+        tempSetupSecurity = 'both';
+        tempSetupTrigger = 'always';
         updateWizardProgressIndicators(1);
-        document.querySelectorAll('.wizard-step').forEach(el => {
-          el.classList.remove('active', 'leaving');
-        });
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active', 'leaving'));
         document.getElementById('wizard-step-1').classList.add('active');
         document.getElementById('onboarding-screen').classList.remove('hidden');
         document.getElementById('wizard-action-btn').style.display = "block";
@@ -829,11 +874,113 @@
         document.getElementById('onboarding-screen').classList.add('hidden');
         document.getElementById('card-holder-display').innerText = username;
         document.getElementById('profile-initials').innerText = getInitials(username);
+        
+        // Sync setting form factors
         document.getElementById('settings-username-input').value = username;
+        document.getElementById('settings-security-method').value = securityMethod;
+        document.getElementById('settings-security-trigger').value = securityTrigger;
+
         checkRecurringOrders();
         updateUI();
         updateRecurringUI();
+
+        if (securityTrigger === 'always' && !appUnlocked && securityMethod !== 'none') {
+          launchAppLockscreen();
+        }
       }
+    }
+
+    // LOCKSCREEN CORE APPARATUS
+    function launchAppLockscreen() {
+      const overlay = document.getElementById('app-lockscreen');
+      overlay.classList.remove('hidden');
+      
+      document.getElementById('lock-faceid-zone').style.display = 'none';
+      document.getElementById('lock-pin-zone').style.display = 'none';
+
+      if (securityMethod === 'faceid' || securityMethod === 'both') {
+        document.getElementById('lock-faceid-zone').style.display = 'block';
+        triggerLockscreenFaceID();
+      } else if (securityMethod === 'passcode') {
+        document.getElementById('lock-pin-zone').style.display = 'block';
+        resetLockPinDots();
+      }
+    }
+
+    function triggerLockscreenFaceID() {
+      const box = document.getElementById('lock-radar-box');
+      box.classList.remove('success');
+      document.getElementById('lock-screen-desc').innerText = "Scanne Gesicht...";
+
+      setTimeout(() => {
+        box.classList.add('success');
+        document.getElementById('lock-screen-desc').innerText = "Face ID verifiziert";
+        setTimeout(() => {
+          unlockAppComplete();
+        }, 500);
+      }, 1500);
+    }
+
+    function switchToLockPin() {
+      if (!savedPasscode) {
+        unlockAppComplete(); // Fallback if no pin actually set
+        return;
+      }
+      document.getElementById('lock-faceid-zone').style.display = 'none';
+      document.getElementById('lock-pin-zone').style.display = 'block';
+      resetLockPinDots();
+    }
+
+    function unlockAppComplete() {
+      appUnlocked = true;
+      document.getElementById('app-lockscreen').classList.add('hidden');
+    }
+
+    function handleProtectedAction(actionCallback) {
+      if (securityTrigger === 'mutations' && securityMethod !== 'none') {
+        // Require authorization before mutation action
+        const overlay = document.getElementById('app-lockscreen');
+        overlay.classList.remove('hidden');
+        document.getElementById('lock-screen-title').innerText = "Aktion autorisieren";
+        
+        document.getElementById('lock-faceid-zone').style.display = 'none';
+        document.getElementById('lock-pin-zone').style.display = 'none';
+
+        const dynamicUnlock = () => {
+          document.getElementById('app-lockscreen').classList.add('hidden');
+          // Reset view tags
+          document.getElementById('lock-screen-title').innerText = "Vault gesperrt";
+          document.getElementById('lock-screen-desc').innerText = "Authentifizierung erforderlich";
+          actionCallback();
+        };
+
+        if (securityMethod === 'faceid' || securityMethod === 'both') {
+          document.getElementById('lock-faceid-zone').style.display = 'block';
+          document.getElementById('lock-screen-desc').innerText = "Scanne Gesicht...";
+          setTimeout(() => {
+            document.getElementById('lock-radar-box').classList.add('success');
+            setTimeout(() => dynamicUnlock(), 400);
+          }, 1200);
+        } else {
+          document.getElementById('lock-pin-zone').style.display = 'block';
+          runCustomCallbackLockpad(dynamicUnlock);
+        }
+      } else {
+        actionCallback();
+      }
+    }
+
+    // ONBOARDING WIZARD NAVIGATION (DYNAMIC ROUTING)
+    function selectSetupSecurity(method, element) {
+      tempSetupSecurity = method;
+      element.parentNode.querySelectorAll('.selection-item').forEach(item => item.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    function selectSetupTrigger(trigger, element) {
+      tempSetupTrigger = trigger;
+      element.parentNode.querySelectorAll('.selection-item').forEach(item => item.classList.remove('selected'));
+      element.classList.add('selected');
     }
 
     function updateWizardProgressIndicators(step) {
@@ -843,15 +990,29 @@
       });
     }
 
-    // HIGH-END SMOOTH BLUR TRANSITION MANAGER
     function nextWizardStep() {
       if (currentWizardStep === 2) {
         const name = document.getElementById('wizard-username').value.trim();
-        if(!name) { alert('Bitte gib einen Namen für das System ein.'); return; }
+        if(!name) { alert('Bitte gib deinen Namen ein.'); return; }
         username = name;
-      } else if (currentWizardStep === 5) {
+      } else if (currentWizardStep === 4) {
         const initialBal = document.getElementById('wizard-balance').value;
         currentBalance = parseFloat(initialBal) || 0.00;
+      }
+
+      // Dynamic Bypass Rules for Biometrics/PIN Paths
+      let nextStep = currentWizardStep + 1;
+      
+      if (currentWizardStep === 5) {
+        if (tempSetupSecurity === 'none') {
+          nextStep = 8; // Skip Face ID and Passcode entirely
+        } else if (tempSetupSecurity === 'passcode') {
+          nextStep = 7; // Skip Face ID, go to PIN
+        }
+      } else if (currentWizardStep === 6) {
+        if (tempSetupSecurity === 'faceid') {
+          nextStep = 8; // Skip PIN setup, go to triggers
+        }
       }
 
       if (currentWizardStep < totalWizardSteps) {
@@ -859,37 +1020,188 @@
         currentEl.classList.remove('active');
         currentEl.classList.add('leaving');
 
-        currentWizardStep++;
+        currentWizardStep = nextStep;
         const nextEl = document.getElementById(`wizard-step-${currentWizardStep}`);
 
-        // Trigger step shift halfway through blur animation
         setTimeout(() => {
           currentEl.classList.remove('leaving');
           updateWizardProgressIndicators(currentWizardStep);
           nextEl.classList.add('active');
           
-          if (currentWizardStep === totalWizardSteps) {
+          // Trigger special sub-renders inside the steps
+          if (currentWizardStep === 6) {
+            runFaceIDSetupSimulation();
+          } else if (currentWizardStep === 7) {
+            resetSetupPinWorkflow();
+          } else if (currentWizardStep === 10) {
             runAutomatedEncryptionEngine();
           }
-        }, 250);
+        }, 220);
       }
     }
 
-    // SIMULATED SYSTEM ENCRYPTION TIMELINE
-    function runAutomatedEncryptionEngine() {
-      const actionBtn = document.getElementById('wizard-action-btn');
-      actionBtn.style.display = "none"; // Hide button for automation feel
+    // INTERACTIVE SUB-SCREENS FOR ONBOARDING
+    function runFaceIDSetupSimulation() {
+      const btn = document.getElementById('wizard-action-btn');
+      btn.style.display = 'none';
+      const status = document.getElementById('faceid-setup-status');
+      const box = document.getElementById('setup-radar-box');
+      box.classList.remove('success');
+      
+      status.innerText = "Erfasse Gesichtszüge...";
+      
+      setTimeout(() => { status.innerText = "Berechne biometrischen Hash... 45%"; }, 800);
+      setTimeout(() => { status.innerText = "Verschlüssele Geometriedaten... 90%"; }, 1600);
+      
+      setTimeout(() => {
+        box.classList.add('success');
+        status.innerText = "Face ID erfolgreich eingerichtet";
+        status.style.color = "var(--ios-green)";
+        setTimeout(() => {
+          btn.style.display = 'block';
+          nextWizardStep();
+        }, 600);
+      }, 2400);
+    }
 
+    function resetSetupPinWorkflow() {
+      tempPinBuffer = "";
+      tempPinFirstTime = "";
+      document.getElementById('wizard-action-btn').style.display = 'none';
+      document.getElementById('pin-setup-title').innerText = "Code erstellen";
+      document.getElementById('pin-setup-desc').innerText = "Gib einen 4-stelligen PIN ein.";
+      updatePinDots('setup-pin-dots', 0);
+    }
+
+    function buildKeypads() {
+      const setupPad = document.getElementById('setup-numpad');
+      const lockPad = document.getElementById('lock-numpad');
+      
+      const digitLayout = [1,2,3,4,5,6,7,8,9,'✕',0,'⌫'];
+      
+      digitLayout.forEach(dig => {
+        const bSetup = document.createElement('div');
+        bSetup.className = "numpad-btn";
+        bSetup.innerText = dig;
+        bSetup.onclick = () => handleSetupPinInput(dig);
+        setupPad.appendChild(bSetup);
+
+        const bLock = document.createElement('div');
+        bLock.className = "numpad-btn";
+        bLock.innerText = dig;
+        bLock.onclick = () => handleLockPinInput(dig);
+        lockPad.appendChild(bLock);
+      });
+    }
+
+    function handleSetupPinInput(val) {
+      if (val === '✕') {
+        resetSetupPinWorkflow();
+        return;
+      }
+      if (val === '⌫') {
+        if(tempPinBuffer.length > 0) {
+          tempPinBuffer = tempPinBuffer.slice(0, -1);
+          updatePinDots('setup-pin-dots', tempPinBuffer.length);
+        }
+        return;
+      }
+      
+      if(tempPinBuffer.length < 4) {
+        tempPinBuffer += val;
+        updatePinDots('setup-pin-dots', tempPinBuffer.length);
+      }
+
+      if(tempPinBuffer.length === 4) {
+        setTimeout(() => {
+          if (!tempPinFirstTime) {
+            // First code pass complete
+            tempPinFirstTime = tempPinBuffer;
+            tempPinBuffer = "";
+            document.getElementById('pin-setup-title').innerText = "Code bestätigen";
+            document.getElementById('pin-setup-desc').innerText = "Gib den PIN erneut ein, um ihn zu verifizieren.";
+            updatePinDots('setup-pin-dots', 0);
+          } else {
+            // Second code pass verification
+            if (tempPinBuffer === tempPinFirstTime) {
+              savedPasscode = tempPinBuffer;
+              localStorage.setItem('vault_passcode', savedPasscode);
+              document.getElementById('pin-setup-title').innerText = "PIN Verifiziert";
+              document.getElementById('setup-pin-dots').style.opacity = '0';
+              setTimeout(() => {
+                document.getElementById('setup-pin-dots').style.opacity = '1';
+                nextWizardStep();
+              }, 400);
+            } else {
+              alert('Codes stimmen nicht überein. Vorgang wird zurückgesetzt.');
+              resetSetupPinWorkflow();
+            }
+          }
+        }, 150);
+      }
+    }
+
+    let activeLockpadCallback = null;
+    function runCustomCallbackLockpad(cb) {
+      activeLockpadCallback = cb;
+      resetLockPinDots();
+    }
+
+    function resetLockPinDots() {
+      tempPinBuffer = "";
+      updatePinDots('lock-pin-dots', 0);
+    }
+
+    function handleLockPinInput(val) {
+      if (val === '✕') { resetLockPinDots(); return; }
+      if (val === '⌫') {
+        if (tempPinBuffer.length > 0) {
+          tempPinBuffer = tempPinBuffer.slice(0, -1);
+          updatePinDots('lock-pin-dots', tempPinBuffer.length);
+        }
+        return;
+      }
+      if (tempPinBuffer.length < 4) {
+        tempPinBuffer += val;
+        updatePinDots('lock-pin-dots', tempPinBuffer.length);
+      }
+      if (tempPinBuffer.length === 4) {
+        setTimeout(() => {
+          if (tempPinBuffer === savedPasscode) {
+            if (activeLockpadCallback) {
+              const cb = activeLockpadCallback;
+              activeLockpadCallback = null;
+              cb();
+            } else {
+              unlockAppComplete();
+            }
+          } else {
+            alert('Falscher Sperrcode.');
+            resetLockPinDots();
+          }
+        }, 120);
+      }
+    }
+
+    function updatePinDots(containerId, count) {
+      const dots = document.getElementById(containerId).children;
+      for(let i=0; i<4; i++) {
+        if(i < count) dots[i].classList.add('filled');
+        else dots[i].classList.remove('filled');
+      }
+    }
+
+    function runAutomatedEncryptionEngine() {
+      document.getElementById('wizard-action-btn').style.display = "none";
       const bar = document.getElementById('onboarding-loading-bar');
       const statusText = document.getElementById('engine-status');
       
       let progress = 0;
       const logs = [
-        { p: 10, t: "Generiere RSA-4096 Keypair..." },
-        { p: 30, t: "Konstruiere dezentrale SQLite Sandbox..." },
-        { p: 55, t: "Injektiere AES-256 Blockschlüssel..." },
-        { p: 80, t: "Verknüpfe N26 API-Protokolle..." },
-        { p: 95, t: "Verschlüsselung abgeschlossen. Bereit." }
+        { p: 15, t: "Generiere elliptische Schlüsselpaare..." },
+        { p: 40, t: "Konstruiere Secure Storage Mappings..." },
+        { p: 70, t: "Verschlüssele lokale Sandbox-Daten..." },
+        { p: 90, t: "Sicherheits-Architektur scharfgeschaltet." }
       ];
 
       const interval = setInterval(() => {
@@ -903,23 +1215,111 @@
         if (progress >= 100) {
           clearInterval(interval);
           setTimeout(() => {
+            securityMethod = tempSetupSecurity;
+            securityTrigger = tempSetupTrigger;
+            
             localStorage.setItem('vault_username', username);
             localStorage.setItem('vault_balance', currentBalance.toFixed(2));
+            localStorage.setItem('vault_security_method', securityMethod);
+            localStorage.setItem('vault_security_trigger', securityTrigger);
             
             if (currentBalance !== 0 && transactions.length === 0) {
               transactions = [{
-                id: Date.now(),
-                title: "Konto eingerichtet (Startguthaben)",
-                category: "Sonstiges",
-                amount: currentBalance,
+                id: Date.now(), title: "Konto initialisiert (Startguthaben)", category: "Sonstiges", amount: currentBalance,
                 date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
               }];
               localStorage.setItem('vault_transactions', JSON.stringify(transactions));
             }
+            appUnlocked = true; // Avoid double triggering immediately on setup exit
             checkAuth();
-          }, 600);
+          }, 500);
         }
-      }, 70);
+      }, 50);
+    }
+
+    // NAVIGATION TAB STATE MANAGER
+    function switchTab(tabName) {
+      const views = {
+        dashboard: document.getElementById('dashboard-view'),
+        recurring: document.getElementById('recurring-view'),
+        settings: document.getElementById('settings-view')
+      };
+      const tabs = {
+        dashboard: document.getElementById('tab-dashboard'),
+        recurring: document.getElementById('tab-recurring')
+      };
+      
+      const titleText = document.getElementById('app-title-text');
+
+      // Hide all views, remove active tab indicators
+      Object.values(views).forEach(v => v.style.display = 'none');
+      Object.values(tabs).forEach(t => t.classList.remove('active'));
+
+      if (tabName === 'dashboard') {
+        views.dashboard.style.display = 'flex';
+        tabs.dashboard.classList.add('active');
+        titleText.innerText = "Vault";
+        updateUI();
+      } else if (tabName === 'recurring') {
+        views.recurring.style.display = 'flex';
+        tabs.recurring.classList.add('active');
+        titleText.innerText = "Daueraufträge";
+        updateRecurringUI();
+      } else if (tabName === 'settings') {
+        views.settings.style.display = 'flex';
+        titleText.innerText = "Einstellungen";
+      }
+    }
+
+    // RETROACTIVE CONFIGURATION CHANGES FROM THE SETTINGS VIEW
+    function updateProfileName(val) {
+      const clean = val.trim();
+      if (!clean) return;
+      username = clean;
+      localStorage.setItem('vault_username', username);
+      document.getElementById('card-holder-display').innerText = username;
+      document.getElementById('profile-initials').innerText = getInitials(username);
+    }
+
+    function changeSecurityMethod(val) {
+      securityMethod = val;
+      localStorage.setItem('vault_security_method', securityMethod);
+      if((securityMethod === 'passcode' || securityMethod === 'both') && !savedPasscode) {
+        alert('Hinweis: Du hast noch keinen Sperrcode generiert. Es wird empfohlen, jetzt einen PIN festzulegen.');
+        resetPinFlow();
+      }
+    }
+
+    function changeSecurityTrigger(val) {
+      securityTrigger = val;
+      localStorage.setItem('vault_security_trigger', securityTrigger);
+    }
+
+    function resetPinFlow() {
+      // Toggle onboarding layer targeting solely the pin interface dynamic loop
+      tempPinBuffer = "";
+      tempPinFirstTime = "";
+      document.getElementById('onboarding-screen').classList.remove('hidden');
+      document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+      document.getElementById('wizard-step-7').classList.add('active');
+      document.getElementById('wizard-action-btn').style.display = 'none';
+      
+      // Override onboarding dynamic route to exit back to dashboard on finish
+      currentWizardStep = 7;
+      tempSetupSecurity = 'passcode'; // Triggers routing to step 8
+    }
+
+    function handleLogout() {
+      if(confirm('Möchtest du dich abmelden? Deine lokalen Schlüssel bleiben erhalten.')) {
+        username = ""; localStorage.removeItem('vault_username'); appUnlocked = false; checkAuth();
+      }
+    }
+
+    function resetAllData() {
+      if(confirm('Kritischer Befehl: Möchtest du die gesamte Datenbank inklusive aller Umsätze, PINs und Verträge restlos vernichten?')) {
+        localStorage.clear(); currentBalance = 0.00; transactions = []; username = ""; savedPasscode = ""; securityMethod = "both"; securityTrigger = "always";
+        appUnlocked = false; checkAuth();
+      }
     }
 
     function getInitials(name) {
@@ -928,38 +1328,10 @@
       return name.substring(0, 2).toUpperCase();
     }
 
-    function switchTab(tabName) {
-      const dbView = document.getElementById('dashboard-view');
-      const recView = document.getElementById('recurring-view');
-      const tabDb = document.getElementById('tab-dashboard');
-      const tabRec = document.getElementById('tab-recurring');
-      const titleText = document.getElementById('app-title-text');
-
-      if (tabName === 'dashboard') {
-        dbView.style.display = 'flex';
-        recView.style.display = 'none';
-        tabDb.classList.add('active');
-        tabRec.classList.remove('active');
-        titleText.innerText = "Vault";
-        updateUI();
-      } else {
-        dbView.style.display = 'none';
-        recView.style.display = 'flex';
-        tabDb.classList.remove('active');
-        tabRec.classList.add('active');
-        titleText.innerText = "Daueraufträge";
-        updateRecurringUI();
-      }
-    }
-
-    // POINTER SYSTEM (SWIPE TO MUTATE)
+    // POINTER SYSTEM (SWIPE MOVEMENTS TO MUTATE LOGS)
     function pointerDownHandler(e, id, isRecurring) {
-      activeRow = e.currentTarget;
-      startX = e.clientX;
-      isDragging = true;
-      
-      activeRow.setPointerCapture(e.pointerId);
-      activeRow.style.transition = 'none';
+      activeRow = e.currentTarget; startX = e.clientX; isDragging = true;
+      activeRow.setPointerCapture(e.pointerId); activeRow.style.transition = 'none';
       const bg = document.getElementById((isRecurring ? 'rec-bg-' : 'bg-') + id);
       if (bg) bg.style.transition = 'none';
     }
@@ -967,20 +1339,14 @@
     function pointerMoveHandler(e, id, isRecurring) {
       if (!isDragging || !activeRow) return;
       const diffX = e.clientX - startX;
-      
       if (!isRecurring && diffX > 0) return;
-
       activeRow.style.transform = `translateX(${diffX}px)`;
       
       const bg = document.getElementById((isRecurring ? 'rec-bg-' : 'bg-') + id);
       if (bg) {
-        let opacity = Math.min(Math.abs(diffX) / 140, 1);
-        bg.style.opacity = opacity;
-        
+        let opacity = Math.min(Math.abs(diffX) / 140, 1); bg.style.opacity = opacity;
         if (isRecurring) {
-          const iconEdit = bg.querySelector('.icon-edit');
-          const iconTrash = bg.querySelector('.icon-trash');
-          
+          const iconEdit = bg.querySelector('.icon-edit'); const iconTrash = bg.querySelector('.icon-trash');
           if (diffX > 0) {
             bg.style.backgroundColor = 'var(--mono-light)';
             if (iconEdit) { iconEdit.style.opacity = opacity; iconEdit.style.transform = `scale(${Math.min(0.6 + (diffX/240), 1.1)})`; }
@@ -1000,10 +1366,7 @@
 
     function pointerUpHandler(e, id, isRecurring) {
       if (!isDragging || !activeRow) return;
-      isDragging = false;
-      const diffX = e.clientX - startX;
-      const threshold = 120;
-      
+      isDragging = false; const diffX = e.clientX - startX; const threshold = 120;
       activeRow.releasePointerCapture(e.pointerId);
       activeRow.style.transition = 'transform 0.25s cubic-bezier(0.15, 0.85, 0.35, 1), opacity 0.25s ease';
       
@@ -1012,65 +1375,49 @@
 
       if (isRecurring) {
         if (diffX < -threshold) {
-          activeRow.style.transform = `translateX(-100%)`;
-          activeRow.style.opacity = '0';
-          setTimeout(() => { deleteRecurringOrder(id); }, 200);
+          activeRow.style.transform = `translateX(-100%)`; activeRow.style.opacity = '0';
+          handleProtectedAction(() => { deleteRecurringOrder(id); });
         } else if (diffX > threshold) {
-          activeRow.style.transform = 'translateX(0px)';
-          if (bg) bg.style.opacity = '0';
-          setTimeout(() => { openEditRecurringModal(id); }, 50);
+          activeRow.style.transform = 'translateX(0px)'; if (bg) bg.style.opacity = '0';
+          handleProtectedAction(() => { openEditRecurringModal(id); });
         } else {
-          activeRow.style.transform = 'translateX(0px)';
-          if (bg) bg.style.opacity = '0';
+          activeRow.style.transform = 'translateX(0px)'; if (bg) bg.style.opacity = '0';
         }
       } else {
         if (diffX < -threshold) {
-          activeRow.style.transform = `translateX(-100%)`;
-          activeRow.style.opacity = '0';
+          activeRow.style.transform = `translateX(-100%)`; activeRow.style.opacity = '0';
           const wrapper = document.getElementById(`wrapper-${id}`);
-          setTimeout(() => {
+          handleProtectedAction(() => {
             if (wrapper) { wrapper.style.height = '0px'; wrapper.style.marginBottom = '0px'; }
-            setTimeout(() => { deleteTransaction(id); }, 200);
-          }, 50);
+            setTimeout(() => deleteTransaction(id), 200);
+          });
         } else {
-          activeRow.style.transform = 'translateX(0px)';
-          if (bg) bg.style.opacity = '0';
+          activeRow.style.transform = 'translateX(0px)'; if (bg) bg.style.opacity = '0';
         }
       }
       activeRow = null;
     }
 
-    // RENDERING PLATFORM
+    // UI RENDERERS
     function updateUI() {
       document.getElementById('total-balance').innerText = formatCurrency(currentBalance);
-      const container = document.getElementById('transaction-container');
-      container.innerHTML = '';
-
+      const container = document.getElementById('transaction-container'); container.innerHTML = '';
       if (transactions.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; margin-top: 24px; font-size: 15px;">Noch keine Kontobewegungen.</p>';
-        return;
+        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; margin-top: 24px; font-size: 15px;">Keine Umsätze registriert.</p>'; return;
       }
-
       transactions.forEach(t => {
         const isIncome = t.amount > 0;
         container.innerHTML += `
           <div class="transaction-row-wrapper" id="wrapper-${t.id}" style="height: 72px; margin-bottom: 0px;">
-            <div class="transaction-row" id="row-${t.id}" 
-                 onpointerdown="pointerDownHandler(event, ${t.id}, false)" 
-                 onpointermove="pointerMoveHandler(event, ${t.id}, false)" 
-                 onpointerup="pointerUpHandler(event, ${t.id}, false)">
+            <div class="transaction-row" id="row-${t.id}" onpointerdown="pointerDownHandler(event, ${t.id}, false)" onpointermove="pointerMoveHandler(event, ${t.id}, false)" onpointerup="pointerUpHandler(event, ${t.id}, false)">
               <div class="row-action-overlay" id="bg-${t.id}">
                 <div></div>
                 <svg class="trash-right" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF453A" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
               </div>
-              <div class="trans-info">
-                <span class="trans-title">${escapeHtml(t.title)}</span>
-                <span class="trans-meta">${t.category} • ${t.date}</span>
-              </div>
+              <div class="trans-info"><span class="trans-title">${escapeHtml(t.title)}</span><span class="trans-meta">${t.category} • ${t.date}</span></div>
               <div class="trans-amount ${isIncome ? 'income' : 'expense'}">${isIncome ? '＋ ' : '－ '}${formatCurrency(Math.abs(t.amount))}</div>
             </div>
-          </div>
-        `;
+          </div>`;
       });
     }
 
@@ -1078,41 +1425,27 @@
       const container = document.getElementById('recurring-tab-container');
       let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
       container.innerHTML = '';
-
       if (recurringList.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; margin-top: 24px; font-size: 15px;">Keine aktiven Daueraufträge.</p>';
-        return;
+        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; margin-top: 24px; font-size: 15px;">Keine aktiven Daueraufträge.</p>'; return;
       }
-
       recurringList.forEach(r => {
-        const isIncome = r.amount > 0;
-        const intervalLabel = r.interval === 'monatlich' ? 'Monatlich' : 'Wöchentlich';
+        const isIncome = r.amount > 0; const intervalLabel = r.interval === 'monatlich' ? 'Monatlich' : 'Wöchentlich';
         container.innerHTML += `
           <div class="transaction-row-wrapper" id="rec-wrapper-${r.id}" style="height: 72px;">
-            <div class="transaction-row" id="rec-row-${r.id}" 
-                 onpointerdown="pointerDownHandler(event, ${r.id}, true)" 
-                 onpointermove="pointerMoveHandler(event, ${r.id}, true)" 
-                 onpointerup="pointerUpHandler(event, ${r.id}, true)">
+            <div class="transaction-row" id="rec-row-${r.id}" onpointerdown="pointerDownHandler(event, ${r.id}, true)" onpointermove="pointerMoveHandler(event, ${r.id}, true)" onpointerup="pointerUpHandler(event, ${r.id}, true)">
               <div class="row-action-overlay" id="rec-bg-${r.id}">
                 <svg class="icon-edit" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                 <svg class="icon-trash" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF453A" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
               </div>
-              <div class="trans-info">
-                <span class="trans-title">${escapeHtml(r.title)}</span>
-                <span class="trans-meta">${r.category} • ${intervalLabel}</span>
-              </div>
+              <div class="trans-info"><span class="trans-title">${escapeHtml(r.title)}</span><span class="trans-meta">${r.category} • ${intervalLabel}</span></div>
               <div class="trans-amount ${isIncome ? 'income' : 'expense'}">${isIncome ? '＋ ' : '－ '}${formatCurrency(Math.abs(r.amount))}</div>
             </div>
-          </div>
-        `;
+          </div>`;
       });
     }
 
     function openModal(type, recurring = false) {
-      currentType = type;
-      isRecurringMode = recurring;
-      editingRecurringId = null;
-      
+      currentType = type; isRecurringMode = recurring; editingRecurringId = null;
       if (recurring) {
         document.getElementById('modal-view-title').innerText = type === 'income' ? 'Dauerauftrag Einnahme' : 'Dauerauftrag Ausgabe';
         document.getElementById('interval-box').style.display = 'flex';
@@ -1120,148 +1453,78 @@
         document.getElementById('modal-view-title').innerText = type === 'income' ? 'Einnahme buchen' : 'Ausgabe buchen';
         document.getElementById('interval-box').style.display = 'none';
       }
-
-      document.getElementById('input-amount').value = '';
-      document.getElementById('input-title').value = '';
+      document.getElementById('input-amount').value = ''; document.getElementById('input-title').value = '';
       document.getElementById('transaction-modal').classList.add('active');
     }
 
     function openEditRecurringModal(id) {
       let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
-      const order = recurringList.find(r => r.id === id);
-      if (!order) return;
-
-      editingRecurringId = id;
-      isRecurringMode = true;
-      currentType = order.amount > 0 ? 'income' : 'expense';
-
+      const order = recurringList.find(r => r.id === id); if (!order) return;
+      editingRecurringId = id; isRecurringMode = true; currentType = order.amount > 0 ? 'income' : 'expense';
       document.getElementById('modal-view-title').innerText = 'Dauerauftrag bearbeiten';
       document.getElementById('interval-box').style.display = 'flex';
-      
       document.getElementById('input-amount').value = Math.abs(order.amount).toFixed(2);
       document.getElementById('input-title').value = order.title;
       document.getElementById('input-category').value = order.category;
       document.getElementById('input-interval').value = order.interval;
-
       document.getElementById('transaction-modal').classList.add('active');
     }
 
-    function closeModal() {
-      document.getElementById('transaction-modal').classList.remove('active');
-      editingRecurringId = null;
-    }
+    function closeModal() { document.getElementById('transaction-modal').classList.remove('active'); editingRecurringId = null; }
 
     function saveTransaction() {
       const amountStr = document.getElementById('input-amount').value;
       const titleStr = document.getElementById('input-title').value.trim();
       const categoryStr = document.getElementById('input-category').value;
-
-      if (!amountStr || parseFloat(amountStr) <= 0 || !titleStr) {
-        alert('Bitte gib einen gültigen Betrag und Verwendungszweck ein.');
-        return;
-      }
-
-      let amount = parseFloat(amountStr);
-      if (currentType === 'expense') amount = -amount;
-
+      if (!amountStr || parseFloat(amountStr) <= 0 || !titleStr) { alert('Bitte Daten eintragen.'); return; }
+      
+      let amount = parseFloat(amountStr); if (currentType === 'expense') amount = -amount;
       let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
 
       if (editingRecurringId !== null) {
         const idx = recurringList.findIndex(r => r.id === editingRecurringId);
         if (idx !== -1) {
-          recurringList[idx].title = titleStr;
-          recurringList[idx].category = categoryStr;
-          recurringList[idx].amount = amount;
-          recurringList[idx].interval = document.getElementById('input-interval').value;
+          recurringList[idx].title = titleStr; recurringList[idx].category = categoryStr;
+          recurringList[idx].amount = amount; recurringList[idx].interval = document.getElementById('input-interval').value;
         }
-        localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
-        editingRecurringId = null;
+        localStorage.setItem('vault_recurring', JSON.stringify(recurringList)); editingRecurringId = null;
       } else if (isRecurringMode) {
-        const interval = document.getElementById('input-interval').value;
-        let nextExecDate = new Date();
+        const interval = document.getElementById('input-interval').value; let nextExecDate = new Date();
         interval === 'monatlich' ? nextExecDate.setMonth(nextExecDate.getMonth() + 1) : nextExecDate.setDate(nextExecDate.getDate() + 7);
-
-        const newRecurring = {
-          id: Date.now(), title: titleStr, category: categoryStr, amount: amount, interval: interval, nextDate: nextExecDate.toISOString()
-        };
-        recurringList.push(newRecurring);
+        recurringList.push({ id: Date.now(), title: titleStr, category: categoryStr, amount: amount, interval: interval, nextDate: nextExecDate.toISOString() });
         localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
-
-        // Erste Buchung wird im Log verzeichnet
-        const initialTx = {
-          id: Date.now() + 1, title: titleStr + " (Dauerauftrag)", category: categoryStr, amount: amount,
-          date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
-        };
-        transactions.unshift(initialTx);
+        transactions.unshift({ id: Date.now() + 1, title: titleStr + " (Dauerauftrag)", category: categoryStr, amount: amount, date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) });
         currentBalance += amount;
       } else {
-        const newTransaction = {
-          id: Date.now(), title: titleStr, category: categoryStr, amount: amount,
-          date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
-        };
-        transactions.unshift(newTransaction);
+        transactions.unshift({ id: Date.now(), title: titleStr, category: categoryStr, amount: amount, date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) });
         currentBalance += amount;
       }
-
-      saveToStorage();
-      updateUI();
-      updateRecurringUI();
-      closeModal();
+      saveToStorage(); updateUI(); updateRecurringUI(); closeModal();
     }
 
     function checkRecurringOrders() {
-      let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
-      let updated = false;
-      const now = new Date();
-
+      let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || []; let updated = false; const now = new Date();
       recurringList.forEach(order => {
-        if (!order.nextDate) return;
-        let nextExecution = new Date(order.nextDate);
-
+        if (!order.nextDate) return; let nextExecution = new Date(order.nextDate);
         while (now >= nextExecution) {
-          const automatedTx = {
-            id: Date.now() + Math.random(),
-            title: order.title + " (Dauerauftrag)",
-            category: order.category,
-            amount: order.amount,
-            date: nextExecution.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
-          };
-
-          transactions.unshift(automatedTx);
+          transactions.unshift({ id: Date.now() + Math.random(), title: order.title + " (Dauerauftrag)", category: order.category, amount: order.amount, date: nextExecution.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) });
           currentBalance += order.amount;
-
-          if (order.interval === 'monatlich') {
-            nextExecution.setMonth(nextExecution.getMonth() + 1);
-          } else if (order.interval === 'wöchentlich') {
-            nextExecution.setDate(nextExecution.getDate() + 7);
-          }
-          order.nextDate = nextExecution.toISOString();
-          updated = true;
+          order.interval === 'monatlich' ? nextExecution.setMonth(nextExecution.getMonth() + 1) : nextExecution.setDate(nextExecution.getDate() + 7);
+          order.nextDate = nextExecution.toISOString(); updated = true;
         }
       });
-
-      if (updated) {
-        saveToStorage();
-        localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
-      }
+      if (updated) { saveToStorage(); localStorage.setItem('vault_recurring', JSON.stringify(recurringList)); }
     }
 
-    // FIX: Das Entfernen aus der UI-Kontoaktivität löscht AB JETZT NUR NOCH das Logelement. Der Dauerauftrag bleibt zu 100% aktiv.
     function deleteTransaction(id) {
       const idx = transactions.findIndex(t => t.id === id);
-      if (idx !== -1) {
-        transactions.splice(idx, 1);
-        saveToStorage();
-        updateUI();
-      }
+      if (idx !== -1) { transactions.splice(idx, 1); saveToStorage(); updateUI(); }
     }
 
-    // Beendet den Dauerauftrag-Vertrag ausschließlich im Dauerauftrag-Tab.
     function deleteRecurringOrder(id) {
       let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
       recurringList = recurringList.filter(r => r.id !== id);
-      localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
-      updateRecurringUI();
+      localStorage.setItem('vault_recurring', JSON.stringify(recurringList)); updateRecurringUI();
     }
 
     function saveToStorage() {
@@ -1269,71 +1532,25 @@
       localStorage.setItem('vault_transactions', JSON.stringify(transactions));
     }
 
-    function formatCurrency(val) {
-      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(val);
-    }
+    function formatCurrency(val) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(val); }
 
-    // 3D GYRO EFFECT ENGINE
     function setup3DEffect() {
-      const trigger = document.getElementById('card-trigger');
-      const card = document.getElementById('3d-card');
-      const glare = document.getElementById('card-glare');
-
+      const trigger = document.getElementById('card-trigger'); const card = document.getElementById('3d-card'); const glare = document.getElementById('card-glare');
       const handleMove = (e) => {
         if (document.getElementById('dashboard-view').style.display === 'none') return;
         const rect = trigger.getBoundingClientRect();
-        let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
-        const midX = rect.width / 2;
-        const midY = rect.height / 2;
-
-        const rotateX = ((midY - y) / midY) * 12;
-        const rotateY = ((x - midX) / midX) * 12;
-
+        let clientX = e.touches ? e.touches[0].clientX : e.clientX; let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = clientX - rect.left; const y = clientY - rect.top; const midX = rect.width / 2; const midY = rect.height / 2;
+        const rotateX = ((midY - y) / midY) * 12; const rotateY = ((x - midX) / midX) * 12;
         card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         glare.style.background = `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(255,255,255,0.1) 0%, transparent 65%)`;
       };
-
-      const handleReset = () => {
-        card.style.transform = 'rotateX(0deg) rotateY(0deg)';
-        glare.style.background = `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%)`;
-      };
-
-      trigger.addEventListener('mousemove', handleMove);
-      trigger.addEventListener('mouseleave', handleReset);
-      trigger.addEventListener('touchmove', handleMove, { passive: true });
-      trigger.addEventListener('touchend', handleReset);
+      const handleReset = () => { card.style.transform = 'rotateX(0deg) rotateY(0deg)'; glare.style.background = `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%)`; };
+      trigger.addEventListener('mousemove', handleMove); trigger.addEventListener('mouseleave', handleReset);
+      trigger.addEventListener('touchmove', handleMove, { passive: true }); trigger.addEventListener('touchend', handleReset);
     }
 
-    function openSettings() {
-      document.getElementById('settings-username-input').value = username;
-      document.getElementById('settings-modal').classList.add('active');
-    }
-    function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
-    function saveProfileChanges() {
-      const updatedName = document.getElementById('settings-username-input').value.trim();
-      if (!updatedName) return;
-      username = updatedName;
-      localStorage.setItem('vault_username', username);
-      checkAuth();
-      closeSettings();
-    }
-    function handleLogout() {
-      if(confirm('Abmelden? Die Daten verbleiben auf dem Gerät.')) {
-        username = ""; localStorage.removeItem('vault_username'); closeSettings(); checkAuth();
-      }
-    }
-    function resetAllData() {
-      if(confirm('Möchtest du alle Umsätze und Verträge restlos löschen?')) {
-        localStorage.clear(); currentBalance = 0.00; transactions = []; username = ""; closeSettings(); checkAuth();
-      }
-    }
-    function escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    }
+    function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
   </script>
 </body>
 </html>
