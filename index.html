@@ -146,13 +146,6 @@
       box-shadow: inset 0 1px 2px rgba(255,255,255,0.3);
       position: relative;
     }
-    .card-chip::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      border: 0.5px solid rgba(0,0,0,0.15);
-      border-radius: 6px;
-    }
 
     .balance-overlay {
       position: absolute;
@@ -293,14 +286,10 @@
       pointer-events: none;
     }
 
-    .row-action-overlay svg {
-      color: #FFFFFF;
-    }
-
+    .row-action-overlay svg { color: #FFFFFF; }
     .trans-info { display: flex; flex-direction: column; gap: 2px; }
     .trans-title { font-size: 16px; font-weight: 600; }
     .trans-meta { font-size: 12px; color: var(--text-secondary); }
-    
     .trans-amount { font-size: 16px; font-weight: 700; }
     .trans-amount.income { color: var(--accent-gold); }
     .trans-amount.expense { color: #FFFFFF; }
@@ -332,7 +321,6 @@
       cursor: pointer;
       width: 90px;
     }
-
     .tab-item.active { color: var(--accent-gold); }
     .tab-item svg { width: 24px; height: 24px; stroke: currentColor; }
 
@@ -402,7 +390,7 @@
       margin-top: 12px;
     }
 
-    /* MULTI-STEP WIZARD ONBOARDING */
+    /* HIGH-END MULTI-STEP ONBOARDING WIZARD WITH SMOOTH BLUR TRANSITIONS */
     .onboarding-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -417,44 +405,68 @@
     
     .wizard-progress {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       width: 100%;
+      margin-bottom: 24px;
     }
     .progress-bar {
       flex: 1;
       height: 4px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08);
       border-radius: 2px;
+      transition: background 0.3s ease;
     }
     .progress-bar.active {
       background: var(--accent-gold);
       box-shadow: 0 0 8px var(--accent-gold-glow);
     }
 
+    /* Transition Layer Sandbox */
+    .wizard-step-container {
+      position: relative;
+      flex: 1;
+      width: 100%;
+    }
+
     .wizard-step {
-      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
       flex-direction: column;
       justify-content: center;
-      flex: 1;
+      opacity: 0;
+      filter: blur(20px);
+      transform: scale(0.95) translateY(10px);
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                  filter 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                  transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     }
+    
     .wizard-step.active {
-      display: flex;
+      opacity: 1;
+      filter: blur(0px);
+      transform: scale(1) translateY(0px);
+      pointer-events: auto;
     }
 
     .wizard-icon {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
     .wizard-title {
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 800;
       margin-bottom: 12px;
-      line-height: 1.2;
+      line-height: 1.25;
+      background: linear-gradient(135deg, #FFF 30%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .wizard-desc {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-secondary);
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       line-height: 1.5;
     }
 
@@ -468,7 +480,7 @@
       border: none;
       font-size: 16px;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
     }
   </style>
 </head>
@@ -479,48 +491,87 @@
       <div class="progress-bar active" id="p-step-1"></div>
       <div class="progress-bar" id="p-step-2"></div>
       <div class="progress-bar" id="p-step-3"></div>
+      <div class="progress-bar" id="p-step-4"></div>
+      <div class="progress-bar" id="p-step-5"></div>
+      <div class="progress-bar" id="p-step-6"></div>
     </div>
 
-    <div class="wizard-step active" id="wizard-step-1">
-      <div class="wizard-icon">
-        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width="80" height="80">
-          <rect width='180' height='180' rx='40' fill='#1C1C1E' stroke="#D4AF37" stroke-width="3"/>
-          <circle cx='90' cy='90' r='35' fill='none' stroke='#D4AF37' stroke-width='6' />
-          <path d="M90 45 L90 60 M90 120 L90 135" stroke="#D4AF37" stroke-width="6" stroke-linecap="round"/>
-        </svg>
+    <div class="wizard-step-container">
+      
+      <div class="wizard-step active" id="wizard-step-1">
+        <div class="wizard-icon">
+          <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width="76" height="76">
+            <rect width='180' height='180' rx='40' fill='#141416' stroke="#D4AF37" stroke-width="2"/>
+            <circle cx='90' cy='90' r='35' fill='none' stroke='#D4AF37' stroke-width='6' />
+            <path d="M90 45 L90 60 M90 120 L90 135" stroke="#D4AF37" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2 class="wizard-title">Willkommen im Vault</h2>
+        <p class="wizard-desc">Dein persönlicher, hochgradig verschlüsselter Finanzsafe. Lass uns gemeinsam dein exklusives Dashboard einrichten. Wie lautet dein Name?</p>
+        <div class="input-box">
+          <label>Inhaber der Karte (Name)</label>
+          <input type="text" id="wizard-username" placeholder="z.B. Max Mustermann">
+        </div>
       </div>
-      <h2 class="wizard-title">Willkommen in deinem Vault</h2>
-      <p class="wizard-desc">Lass uns dein komplett personalisiertes Premium-Finanz-Dashboard einrichten. Wie lautet dein Name?</p>
-      <div class="input-box">
-        <label>Vollständiger Name</label>
-        <input type="text" id="wizard-username" placeholder="z.B. Max Mustermann">
-      </div>
-    </div>
 
-    <div class="wizard-step" id="wizard-step-2">
-      <h2 class="wizard-title">Aktueller Kontostand</h2>
-      <p class="wizard-desc">Gib dein aktuelles Startguthaben ein, um deine N26-Umsätze ab jetzt lückenlos zu spiegeln.</p>
-      <div class="input-box">
-        <label>Startguthaben (€)</label>
-        <input type="number" id="wizard-balance" placeholder="0.00" inputmode="decimal" step="0.01">
+      <div class="wizard-step" id="wizard-step-2">
+        <h2 class="wizard-title">Wähle dein N26 Design</h2>
+        <p class="wizard-desc">Personalisiere das optische System deines Dashboards passend zu deinem echten oder gewünschten Kontotyp.</p>
+        <div class="input-box">
+          <label>Karten-Modell</label>
+          <select id="wizard-card-tier">
+            <option value="gold">N26 Gold Edition Premium</option>
+            <option value="metal">N26 Cyber Metal Dark</option>
+            <option value="carbon">N26 Carbon Shadow</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    <div class="wizard-step" id="wizard-step-3">
-      <div class="wizard-icon" style="margin-bottom: 16px;">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-        </svg>
+      <div class="wizard-step" id="wizard-step-3">
+        <h2 class="wizard-title">Startguthaben festlegen</h2>
+        <p class="wizard-desc">Wie viel Geld befindet sich aktuell auf deinem Konto? Dieser Betrag bildet das Fundament für all deine zukünftigen Berechnungen.</p>
+        <div class="input-box">
+          <label>Aktueller Kontostand (€)</label>
+          <input type="number" id="wizard-balance" placeholder="0.00" inputmode="decimal" step="0.01">
+        </div>
       </div>
-      <h2 class="wizard-title">Verschlüsselter Safe</h2>
-      <p class="wizard-desc">Dein Vault speichert sämtliche Transaktionen lokal auf diesem iPhone. Keine Cloud, maximale Privatsphäre.</p>
-      <div class="input-box" style="opacity: 0.7;">
-        <label>System-Verschlüsselung</label>
-        <select disabled>
-          <option>AES-256 LocalStorage Secure</option>
-        </select>
+
+      <div class="wizard-step" id="wizard-step-4">
+        <h2 class="wizard-title">Monatliches Limit setzen</h2>
+        <p class="wizard-desc">Möchtest du dir ein freiwilliges Ausgabenlimit setzen, um deine monatlichen Kosten (z.B. für Abos, Gaming, Essen) perfekt im Blick zu behalten?</p>
+        <div class="input-box">
+          <label>Maximales Monatslimit (Optional in €)</label>
+          <input type="number" id="wizard-budget" placeholder="Kein Limit" inputmode="decimal">
+        </div>
       </div>
+
+      <div class="wizard-step" id="wizard-step-5">
+        <h2 class="wizard-title">Sicherheit & Privatsphäre</h2>
+        <p class="wizard-desc">Sämtliche Daten verbleiben offline auf diesem iPhone. Wähle die bevorzugte Methode zum Schutz deiner Privatsphäre.</p>
+        <div class="input-box">
+          <label>Authentifizierungsmethode</label>
+          <select id="wizard-security-tier">
+            <option>Simuliertes FaceID & PIN-Sperre</option>
+            <option>Nur lokaler App-Sperrcode</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="wizard-step" id="wizard-step-6">
+        <div class="wizard-icon">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <h2 class="wizard-title">Lokalen Tresor verschlüsseln</h2>
+        <p class="wizard-desc">Klicke unten, um deinen dezentralen Datenspeicher final zu initialisieren. Deine Daten gehören zu 100% dir.</p>
+        <div class="input-box" style="opacity: 0.7;">
+          <label>Verschlüsselungs-Standard</label>
+          <input type="text" value="AES-256 On-Device Storage" disabled>
+        </div>
+      </div>
+
     </div>
 
     <div>
@@ -605,7 +656,7 @@
       <div>
         <div class="section-title">Aktive Daueraufträge</div>
         <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; padding-left: 4px;">
-          ← Rechts wischen zum Bearbeiten | Links wischen zum Löschen →
+          ← Rechts wischen zum Bearbeiten | Links wischen zum Beenden →
         </div>
         <div class="transaction-list" id="recurring-tab-container"></div>
       </div>
@@ -684,6 +735,7 @@
     let isRecurringMode = false;
     let editingRecurringId = null;
     let currentWizardStep = 1;
+    const totalWizardSteps = 6;
 
     // Gesture Tracker
     let activeRow = null;
@@ -698,7 +750,9 @@
     function checkAuth() {
       if (!username) {
         currentWizardStep = 1;
-        showWizardStep(1);
+        updateWizardProgressIndicators(1);
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+        document.getElementById('wizard-step-1').classList.add('active');
         document.getElementById('onboarding-screen').classList.remove('hidden');
       } else {
         document.getElementById('onboarding-screen').classList.add('hidden');
@@ -711,40 +765,52 @@
       }
     }
 
-    // MULTI-STEP WIZARD ENGINE
-    function showWizardStep(step) {
-      document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+    function updateWizardProgressIndicators(step) {
       document.querySelectorAll('.progress-bar').forEach((el, idx) => {
         if(idx < step) el.classList.add('active');
         else el.classList.remove('active');
       });
-      document.getElementById(`wizard-step-${step}`).classList.add('active');
-      
-      const btn = document.getElementById('wizard-action-btn');
-      if(step === 3) {
-        btn.innerText = "Einrichtung abschließen";
-      } else {
-        btn.innerText = "Fortfahren";
-      }
     }
 
+    // HIGH-END SMOOTH BLUR & TRANSITION SWITCHER
     function nextWizardStep() {
-      if(currentWizardStep === 1) {
+      // Validierungen je nach Schritt vor dem sanften Wechsel
+      if (currentWizardStep === 1) {
         const name = document.getElementById('wizard-username').value.trim();
-        if(!name) { alert('Bitte gib deinen Namen ein.'); return; }
+        if(!name) { alert('Bitte gib einen gültigen Namen ein.'); return; }
         username = name;
-        currentWizardStep = 2;
-        showWizardStep(2);
-      } else if(currentWizardStep === 2) {
+      } else if (currentWizardStep === 3) {
         const initialBal = document.getElementById('wizard-balance').value;
         currentBalance = parseFloat(initialBal) || 0.00;
-        currentWizardStep = 3;
-        showWizardStep(3);
-      } else if(currentWizardStep === 3) {
+      }
+
+      if (currentWizardStep < totalWizardSteps) {
+        const currentEl = document.getElementById(`wizard-step-${currentWizardStep}`);
+        currentWizardStep++;
+        const nextEl = document.getElementById(`wizard-step-${currentWizardStep}`);
+
+        // Phase 1: Aktuellen Schritt ausblenden und weichzeichnen
+        currentEl.classList.remove('active');
+
+        // Phase 2: Nach einem extrem kurzen Timeout den nächsten Schritt einblenden
+        setTimeout(() => {
+          updateWizardProgressIndicators(currentWizardStep);
+          nextEl.classList.add('active');
+          
+          const btn = document.getElementById('wizard-action-btn');
+          if (currentWizardStep === totalWizardSteps) {
+            btn.innerText = "Einrichtung abschließen";
+          } else {
+            btn.innerText = "Fortfahren";
+          }
+        }, 50);
+
+      } else if (currentWizardStep === totalWizardSteps) {
+        // Finale Speicherung nach Schritt 6
         localStorage.setItem('vault_username', username);
         localStorage.setItem('vault_balance', currentBalance.toFixed(2));
-        // Generiere eine erste Infotransaktion für das Startguthaben falls gesetzt
-        if(currentBalance !== 0) {
+        
+        if (currentBalance !== 0 && transactions.length === 0) {
           transactions = [{
             id: Date.now(),
             title: "Konto eingerichtet (Startguthaben)",
@@ -944,7 +1010,6 @@
       });
     }
 
-    // MODAL FLOWS
     function openModal(type, recurring = false) {
       currentType = type;
       isRecurringMode = recurring;
@@ -1024,7 +1089,7 @@
         recurringList.push(newRecurring);
         localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
 
-        // Bucht die erste Iteration sofort
+        // Bucht die erste Iteration direkt ein
         const initialTx = {
           id: Date.now() + 1, title: titleStr + " (Dauerauftrag)", category: categoryStr, amount: amount,
           date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
@@ -1083,17 +1148,17 @@
       }
     }
 
+    // FIX: Das Löschen eines Protokolleintrags entfernt nur die Zeile aus der UI-Historie. Dein Guthaben bleibt unangetastet!
     function deleteTransaction(id) {
       const idx = transactions.findIndex(t => t.id === id);
       if (idx !== -1) {
-        currentBalance -= transactions[idx].amount;
         transactions.splice(idx, 1);
         saveToStorage();
         updateUI();
       }
     }
 
-    // FIX: HIER WIRD AUSSCHLIESSLICH DER AUFTRAG GESTOPPT, DAS VORHANDENE GELD BLEIBT UNBERÜHRT
+    // FIX: Beendet nur den zukünftigen Rhythmus im Abo-Tab. Bisher Erspartes bleibt exakt wie es ist.
     function deleteRecurringOrder(id) {
       let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
       recurringList = recurringList.filter(r => r.id !== id);
