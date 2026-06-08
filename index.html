@@ -9,7 +9,7 @@
   
   <link class="apple-touch-icon" rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0C'/%3E%3Ccircle cx='90' cy='90' r='40' fill='none' stroke='%23D4AF37' stroke-width='8'/%3E%3Cpath d='M90 30 L90 50 M90 130 L90 150 M30 90 L50 90 M130 90 L150 90' stroke='%23D4AF37' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='10' fill='%23D4AF37'/%3E%3C/svg%3E">
 
-  <title>Vault - Gold Edition</title>
+  <title>Vault - Premium Edition</title>
   <style>
     :root {
       --bg-main: #070708;
@@ -20,7 +20,7 @@
       --row-bg: #141416;
       --input-bg: #1C1C1E;
       --apple-border: rgba(255, 255, 255, 0.06);
-      --blur-bg: rgba(10, 10, 12, 0.85);
+      --blur-bg: rgba(10, 10, 12, 0.92);
       --mono-dark: #2C2C2E;
       --mono-light: #444446;
     }
@@ -199,7 +199,7 @@
     .mc-red { background: #EB001B; left: 0; }
     .mc-yellow { background: #FF5F00; right: 0; opacity: 0.94; }
 
-    /* ACTION GRID - CLEAN METALLIC GLASS */
+    /* ACTION GRID */
     .action-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -224,15 +224,10 @@
       transform: scale(0.92); 
       border-color: var(--accent-gold);
     }
-    .action-btn svg {
-      color: #FFFFFF;
-      transition: color 0.2s ease;
-    }
-    .action-btn:hover svg {
-      color: var(--accent-gold);
-    }
+    .action-btn svg { color: #FFFFFF; transition: color 0.2s ease; }
+    .action-btn:hover svg { color: var(--accent-gold); }
 
-    /* TRANSACTION ROW STYLING */
+    /* TRANSACTION ROWS */
     .section-title {
       font-size: 13px;
       text-transform: uppercase;
@@ -270,7 +265,6 @@
       z-index: 2;
       transform: translateX(0px);
       touch-action: pan-y;
-      user-select: none;
     }
 
     .row-action-overlay {
@@ -390,7 +384,7 @@
       margin-top: 12px;
     }
 
-    /* HIGH-END MULTI-STEP ONBOARDING WIZARD WITH SMOOTH BLUR TRANSITIONS */
+    /* HIGH-END MULTI-STEP ONBOARDING WITH BULLETPROOF CINEMATIC BLUR TRANSITIONS */
     .onboarding-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -405,29 +399,29 @@
     
     .wizard-progress {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       width: 100%;
       margin-bottom: 24px;
     }
     .progress-bar {
       flex: 1;
       height: 4px;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
       border-radius: 2px;
-      transition: background 0.3s ease;
+      transition: background 0.4s ease;
     }
     .progress-bar.active {
       background: var(--accent-gold);
-      box-shadow: 0 0 8px var(--accent-gold-glow);
+      box-shadow: 0 0 10px var(--accent-gold-glow);
     }
 
-    /* Transition Layer Sandbox */
     .wizard-step-container {
       position: relative;
       flex: 1;
       width: 100%;
     }
 
+    /* CINEMATIC LAYER STATE MACHINE (BLUR + SCALE SLIDE) */
     .wizard-step {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -435,19 +429,26 @@
       flex-direction: column;
       justify-content: center;
       opacity: 0;
-      filter: blur(20px);
-      transform: scale(0.95) translateY(10px);
+      filter: blur(30px);
+      transform: scale(0.92);
       pointer-events: none;
-      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-                  filter 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-                  transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: opacity 0.6s cubic-bezier(0.2, 1, 0.2, 1),
+                  filter 0.6s cubic-bezier(0.2, 1, 0.2, 1),
+                  transform 0.6s cubic-bezier(0.2, 1, 0.2, 1);
     }
     
     .wizard-step.active {
       opacity: 1;
       filter: blur(0px);
-      transform: scale(1) translateY(0px);
+      transform: scale(1);
       pointer-events: auto;
+    }
+
+    .wizard-step.leaving {
+      opacity: 0;
+      filter: blur(35px);
+      transform: scale(1.06);
+      pointer-events: none;
     }
 
     .wizard-icon {
@@ -455,18 +456,18 @@
       margin-bottom: 24px;
     }
     .wizard-title {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 800;
       margin-bottom: 12px;
       line-height: 1.25;
-      background: linear-gradient(135deg, #FFF 30%, var(--accent-gold) 100%);
+      background: linear-gradient(135deg, #FFF 40%, var(--accent-gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .wizard-desc {
       font-size: 14px;
       color: var(--text-secondary);
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       line-height: 1.5;
     }
 
@@ -481,6 +482,34 @@
       font-size: 16px;
       cursor: pointer;
       box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
+      transition: transform 0.1s ease;
+    }
+    .wizard-btn:active { transform: scale(0.97); }
+
+    /* ENGINE LOADER ANIMATION */
+    .engine-loader-container {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 20px;
+      position: relative;
+    }
+    .engine-loader-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--accent-gold);
+      box-shadow: 0 0 12px var(--accent-gold);
+      transition: width 0.1s linear;
+    }
+    #engine-status {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--accent-gold);
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
   </style>
 </head>
@@ -494,29 +523,41 @@
       <div class="progress-bar" id="p-step-4"></div>
       <div class="progress-bar" id="p-step-5"></div>
       <div class="progress-bar" id="p-step-6"></div>
+      <div class="progress-bar" id="p-step-7"></div>
+      <div class="progress-bar" id="p-step-8"></div>
+      <div class="progress-bar" id="p-step-9"></div>
     </div>
 
     <div class="wizard-step-container">
       
       <div class="wizard-step active" id="wizard-step-1">
         <div class="wizard-icon">
-          <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width="76" height="76">
-            <rect width='180' height='180' rx='40' fill='#141416' stroke="#D4AF37" stroke-width="2"/>
-            <circle cx='90' cy='90' r='35' fill='none' stroke='#D4AF37' stroke-width='6' />
-            <path d="M90 45 L90 60 M90 120 L90 135" stroke="#D4AF37" stroke-width="6" stroke-linecap="round"/>
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
         </div>
         <h2 class="wizard-title">Willkommen im Vault</h2>
-        <p class="wizard-desc">Dein persönlicher, hochgradig verschlüsselter Finanzsafe. Lass uns gemeinsam dein exklusives Dashboard einrichten. Wie lautet dein Name?</p>
+        <p class="wizard-desc">Dein dezentraler Finanztresor der nächsten Generation. Sämtliche Kontodaten verbleiben isoliert auf diesem Gerät.</p>
         <div class="input-box">
-          <label>Inhaber der Karte (Name)</label>
-          <input type="text" id="wizard-username" placeholder="z.B. Max Mustermann">
+          <label>Nutzungsbedingung</label>
+          <select id="wizard-terms">
+            <option value="accept">Ich akzeptiere die Offline-Verschlüsselung</option>
+          </select>
         </div>
       </div>
 
       <div class="wizard-step" id="wizard-step-2">
-        <h2 class="wizard-title">Wähle dein N26 Design</h2>
-        <p class="wizard-desc">Personalisiere das optische System deines Dashboards passend zu deinem echten oder gewünschten Kontotyp.</p>
+        <h2 class="wizard-title">Konto-Identität</h2>
+        <p class="wizard-desc">Gib den Namen ein, der auf deiner personalisierten digitalen Bankkarte eingraviert werden soll.</p>
+        <div class="input-box">
+          <label>Karteninhaber (Name)</label>
+          <input type="text" id="wizard-username" placeholder="z.B. Max Mustermann">
+        </div>
+      </div>
+
+      <div class="wizard-step" id="wizard-step-3">
+        <h2 class="wizard-title">Karten-System wählen</h2>
+        <p class="wizard-desc">Wähle dein bevorzugtes UI-Modell für deine Wallet aus.</p>
         <div class="input-box">
           <label>Karten-Modell</label>
           <select id="wizard-card-tier">
@@ -527,49 +568,76 @@
         </div>
       </div>
 
-      <div class="wizard-step" id="wizard-step-3">
-        <h2 class="wizard-title">Startguthaben festlegen</h2>
-        <p class="wizard-desc">Wie viel Geld befindet sich aktuell auf deinem Konto? Dieser Betrag bildet das Fundament für all deine zukünftigen Berechnungen.</p>
-        <div class="input-box">
-          <label>Aktueller Kontostand (€)</label>
-          <input type="number" id="wizard-balance" placeholder="0.00" inputmode="decimal" step="0.01">
-        </div>
-      </div>
-
       <div class="wizard-step" id="wizard-step-4">
-        <h2 class="wizard-title">Monatliches Limit setzen</h2>
-        <p class="wizard-desc">Möchtest du dir ein freiwilliges Ausgabenlimit setzen, um deine monatlichen Kosten (z.B. für Abos, Gaming, Essen) perfekt im Blick zu behalten?</p>
+        <h2 class="wizard-title">Währung & Region</h2>
+        <p class="wizard-desc">Lege fest, in welcher Hauptwährung deine Berechnungen und Übersichten kalkuliert werden sollen.</p>
         <div class="input-box">
-          <label>Maximales Monatslimit (Optional in €)</label>
-          <input type="number" id="wizard-budget" placeholder="Kein Limit" inputmode="decimal">
-        </div>
-      </div>
-
-      <div class="wizard-step" id="wizard-step-5">
-        <h2 class="wizard-title">Sicherheit & Privatsphäre</h2>
-        <p class="wizard-desc">Sämtliche Daten verbleiben offline auf diesem iPhone. Wähle die bevorzugte Methode zum Schutz deiner Privatsphäre.</p>
-        <div class="input-box">
-          <label>Authentifizierungsmethode</label>
-          <select id="wizard-security-tier">
-            <option>Simuliertes FaceID & PIN-Sperre</option>
-            <option>Nur lokaler App-Sperrcode</option>
+          <label>Standard-Währung</label>
+          <select id="wizard-currency">
+            <option value="EUR">Euro (€)</option>
+            <option value="USD">US-Dollar ($)</option>
+            <option value="CHF">Schweizer Franken (CHF)</option>
           </select>
         </div>
       </div>
 
+      <div class="wizard-step" id="wizard-step-5">
+        <h2 class="wizard-title">Startguthaben verbuchen</h2>
+        <p class="wizard-desc">Wie viel Guthaben befindet sich aktuell real auf deinem Konto? Dieser Betrag bildet das mathematische Fundament.</p>
+        <div class="input-box">
+          <label>Aktueller Kontostand</label>
+          <input type="number" id="wizard-balance" placeholder="0.00" inputmode="decimal" step="0.01">
+        </div>
+      </div>
+
       <div class="wizard-step" id="wizard-step-6">
+        <h2 class="wizard-title">Budget-Architektur</h2>
+        <p class="wizard-desc">Setze ein optionales monatliches Ausgabenlimit für Abos, Gaming oder Verpflegung fest.</p>
+        <div class="input-box">
+          <label>Monatliches Budget-Limit (Optional)</label>
+          <input type="number" id="wizard-budget" placeholder="Kein Limit" inputmode="decimal">
+        </div>
+      </div>
+
+      <div class="wizard-step" id="wizard-step-7">
+        <h2 class="wizard-title">Sicherheits-Ebene</h2>
+        <p class="wizard-desc">Wähle aus, wie der Zugriff auf deine sensiblen Finanzdaten blockiert oder geschützt werden soll.</p>
+        <div class="input-box">
+          <label>Sperrmechanismus</label>
+          <select id="wizard-security-tier">
+            <option>Simuliertes FaceID + App-PIN</option>
+            <option>Nur lokaler App-Sperrcode</option>
+            <option>Keine Sperre (Sofort öffnen)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="wizard-step" id="wizard-step-8">
+        <h2 class="wizard-title">Mitteilungen & Widgets</h2>
+        <p class="wizard-desc">Sollen automatische Abbuchungen deiner Daueraufträge direkt als Push-Mitteilung simuliert werden?</p>
+        <div class="input-box">
+          <label>Hintergrund-Simulation</label>
+          <select id="wizard-push-simulation">
+            <option>Ja, Echtzeit-Simulation aktivieren</option>
+            <option>Nein, nur lautlose Updates</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="wizard-step" id="wizard-step-9">
         <div class="wizard-icon">
-          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2">
+          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
         </div>
-        <h2 class="wizard-title">Lokalen Tresor verschlüsseln</h2>
-        <p class="wizard-desc">Klicke unten, um deinen dezentralen Datenspeicher final zu initialisieren. Deine Daten gehören zu 100% dir.</p>
-        <div class="input-box" style="opacity: 0.7;">
-          <label>Verschlüsselungs-Standard</label>
-          <input type="text" value="AES-256 On-Device Storage" disabled>
+        <h2 class="wizard-title">Initialisiere Tresor...</h2>
+        <p class="wizard-desc">Generiere dezentrale Dateistrukturen und injiziere Verschlüsselungs-Schlüssel in deine lokale Sandbox.</p>
+        
+        <div class="engine-loader-container">
+          <div class="engine-loader-bar" id="onboarding-loading-bar"></div>
         </div>
+        <div id="engine-status">Warte auf Freigabe...</div>
       </div>
 
     </div>
@@ -735,9 +803,8 @@
     let isRecurringMode = false;
     let editingRecurringId = null;
     let currentWizardStep = 1;
-    const totalWizardSteps = 6;
+    const totalWizardSteps = 9;
 
-    // Gesture Tracker
     let activeRow = null;
     let startX = 0;
     let isDragging = false;
@@ -751,9 +818,13 @@
       if (!username) {
         currentWizardStep = 1;
         updateWizardProgressIndicators(1);
-        document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.wizard-step').forEach(el => {
+          el.classList.remove('active', 'leaving');
+        });
         document.getElementById('wizard-step-1').classList.add('active');
         document.getElementById('onboarding-screen').classList.remove('hidden');
+        document.getElementById('wizard-action-btn').style.display = "block";
+        document.getElementById('wizard-action-btn').innerText = "Fortfahren";
       } else {
         document.getElementById('onboarding-screen').classList.add('hidden');
         document.getElementById('card-holder-display').innerText = username;
@@ -772,56 +843,83 @@
       });
     }
 
-    // HIGH-END SMOOTH BLUR & TRANSITION SWITCHER
+    // HIGH-END SMOOTH BLUR TRANSITION MANAGER
     function nextWizardStep() {
-      // Validierungen je nach Schritt vor dem sanften Wechsel
-      if (currentWizardStep === 1) {
+      if (currentWizardStep === 2) {
         const name = document.getElementById('wizard-username').value.trim();
-        if(!name) { alert('Bitte gib einen gültigen Namen ein.'); return; }
+        if(!name) { alert('Bitte gib einen Namen für das System ein.'); return; }
         username = name;
-      } else if (currentWizardStep === 3) {
+      } else if (currentWizardStep === 5) {
         const initialBal = document.getElementById('wizard-balance').value;
         currentBalance = parseFloat(initialBal) || 0.00;
       }
 
       if (currentWizardStep < totalWizardSteps) {
         const currentEl = document.getElementById(`wizard-step-${currentWizardStep}`);
+        currentEl.classList.remove('active');
+        currentEl.classList.add('leaving');
+
         currentWizardStep++;
         const nextEl = document.getElementById(`wizard-step-${currentWizardStep}`);
 
-        // Phase 1: Aktuellen Schritt ausblenden und weichzeichnen
-        currentEl.classList.remove('active');
-
-        // Phase 2: Nach einem extrem kurzen Timeout den nächsten Schritt einblenden
+        // Trigger step shift halfway through blur animation
         setTimeout(() => {
+          currentEl.classList.remove('leaving');
           updateWizardProgressIndicators(currentWizardStep);
           nextEl.classList.add('active');
           
-          const btn = document.getElementById('wizard-action-btn');
           if (currentWizardStep === totalWizardSteps) {
-            btn.innerText = "Einrichtung abschließen";
-          } else {
-            btn.innerText = "Fortfahren";
+            runAutomatedEncryptionEngine();
           }
-        }, 50);
-
-      } else if (currentWizardStep === totalWizardSteps) {
-        // Finale Speicherung nach Schritt 6
-        localStorage.setItem('vault_username', username);
-        localStorage.setItem('vault_balance', currentBalance.toFixed(2));
-        
-        if (currentBalance !== 0 && transactions.length === 0) {
-          transactions = [{
-            id: Date.now(),
-            title: "Konto eingerichtet (Startguthaben)",
-            category: "Sonstiges",
-            amount: currentBalance,
-            date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
-          }];
-          localStorage.setItem('vault_transactions', JSON.stringify(transactions));
-        }
-        checkAuth();
+        }, 250);
       }
+    }
+
+    // SIMULATED SYSTEM ENCRYPTION TIMELINE
+    function runAutomatedEncryptionEngine() {
+      const actionBtn = document.getElementById('wizard-action-btn');
+      actionBtn.style.display = "none"; // Hide button for automation feel
+
+      const bar = document.getElementById('onboarding-loading-bar');
+      const statusText = document.getElementById('engine-status');
+      
+      let progress = 0;
+      const logs = [
+        { p: 10, t: "Generiere RSA-4096 Keypair..." },
+        { p: 30, t: "Konstruiere dezentrale SQLite Sandbox..." },
+        { p: 55, t: "Injektiere AES-256 Blockschlüssel..." },
+        { p: 80, t: "Verknüpfe N26 API-Protokolle..." },
+        { p: 95, t: "Verschlüsselung abgeschlossen. Bereit." }
+      ];
+
+      const interval = setInterval(() => {
+        progress += 2;
+        if(progress > 100) progress = 100;
+        bar.style.width = progress + "%";
+
+        const matchingLog = logs.find(l => progress >= l.p);
+        if(matchingLog) statusText.innerText = matchingLog.t;
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            localStorage.setItem('vault_username', username);
+            localStorage.setItem('vault_balance', currentBalance.toFixed(2));
+            
+            if (currentBalance !== 0 && transactions.length === 0) {
+              transactions = [{
+                id: Date.now(),
+                title: "Konto eingerichtet (Startguthaben)",
+                category: "Sonstiges",
+                amount: currentBalance,
+                date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
+              }];
+              localStorage.setItem('vault_transactions', JSON.stringify(transactions));
+            }
+            checkAuth();
+          }, 600);
+        }
+      }, 70);
     }
 
     function getInitials(name) {
@@ -942,7 +1040,7 @@
       activeRow = null;
     }
 
-    // UI RENDER STAGE
+    // RENDERING PLATFORM
     function updateUI() {
       document.getElementById('total-balance').innerText = formatCurrency(currentBalance);
       const container = document.getElementById('transaction-container');
@@ -1089,7 +1187,7 @@
         recurringList.push(newRecurring);
         localStorage.setItem('vault_recurring', JSON.stringify(recurringList));
 
-        // Bucht die erste Iteration direkt ein
+        // Erste Buchung wird im Log verzeichnet
         const initialTx = {
           id: Date.now() + 1, title: titleStr + " (Dauerauftrag)", category: categoryStr, amount: amount,
           date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
@@ -1148,7 +1246,7 @@
       }
     }
 
-    // FIX: Das Löschen eines Protokolleintrags entfernt nur die Zeile aus der UI-Historie. Dein Guthaben bleibt unangetastet!
+    // FIX: Das Entfernen aus der UI-Kontoaktivität löscht AB JETZT NUR NOCH das Logelement. Der Dauerauftrag bleibt zu 100% aktiv.
     function deleteTransaction(id) {
       const idx = transactions.findIndex(t => t.id === id);
       if (idx !== -1) {
@@ -1158,7 +1256,7 @@
       }
     }
 
-    // FIX: Beendet nur den zukünftigen Rhythmus im Abo-Tab. Bisher Erspartes bleibt exakt wie es ist.
+    // Beendet den Dauerauftrag-Vertrag ausschließlich im Dauerauftrag-Tab.
     function deleteRecurringOrder(id) {
       let recurringList = JSON.parse(localStorage.getItem('vault_recurring')) || [];
       recurringList = recurringList.filter(r => r.id !== id);
@@ -1175,7 +1273,7 @@
       return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(val);
     }
 
-    // GYRO ENGINE 3D EFFECT
+    // 3D GYRO EFFECT ENGINE
     function setup3DEffect() {
       const trigger = document.getElementById('card-trigger');
       const card = document.getElementById('3d-card');
@@ -1224,12 +1322,12 @@
       closeSettings();
     }
     function handleLogout() {
-      if(confirm('Abmelden? Deine Daten bleiben lokal auf dem Gerät gesichert.')) {
+      if(confirm('Abmelden? Die Daten verbleiben auf dem Gerät.')) {
         username = ""; localStorage.removeItem('vault_username'); closeSettings(); checkAuth();
       }
     }
     function resetAllData() {
-      if(confirm('Möchtest du wirklich alle App-Daten und Umsätze unwiderruflich löschen?')) {
+      if(confirm('Möchtest du alle Umsätze und Verträge restlos löschen?')) {
         localStorage.clear(); currentBalance = 0.00; transactions = []; username = ""; closeSettings(); checkAuth();
       }
     }
